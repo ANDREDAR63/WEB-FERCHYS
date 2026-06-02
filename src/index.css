@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Ferchys Postres - Estilos Globales (index.css)
+   Paleta de colores: Cálida, dulce y profesional (Pasteles, chocolate y crema)
+   ========================================================================== */
+
+/* Importación de fuentes de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+:root {
+  /* Tu Nueva Paleta de Colores Real (Rosa, Ciruela y Blanco) */
+  --color-primario: #EE74A5;      /* Rosa Fresa / Chicle */
+  --color-secundario: #fde8f0;    /* Un rosa muy tierno y clarito para fondos */
+  --color-acento: #EE74A5;        /* El mismo rosa para botones destacados */
+  --color-oscuro: #804F5D;        /* Chocolate Ciruela / Texto Principal */
+  --color-claro: #FFFFFF;         /* Blanco Puro / Fondo principal */
+  --color-gris-suave: #f9f6f7;    /* Fondo secundario sutil */
+  
+  /* Fuentes */
+  --fuente-titulos: 'Playfair Display', Georgia, serif;
+  --fuente-cuerpo: 'Montserrat', Helvetica, Arial, sans-serif;
+  
+  /* Sombras y Bordes (Adaptados para que se vean más suaves con el rosa) */
+  --sombra-suave: 0 4px 15px rgba(128, 79, 93, 0.06);
+  --sombra-media: 0 8px 25px rgba(128, 79, 93, 0.1);
+  --borde-redondeado: 12px;
+  --borde-redondeado-lg: 24px;
+  
+  /* Transiciones */
+  --transicion-rapida: all 0.3s ease;
+}
+
+/* Reset Básico y Caja */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Configuración de la Página */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--fuente-cuerpo);
+  background-color: var(--color-claro);
+  color: var(--color-oscuro);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Tipografía */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fuente-titulos);
+  color: var(--color-oscuro);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2.2rem; text-align: center; margin-bottom: 2rem; position: relative; }
+h3 { font-size: 1.5rem; }
+
+/* Decoración sutil para los títulos principales (H2) */
+h2::after {
+  content: '✿';
+  display: block;
+  font-size: 1.2rem;
+  color: var(--color-primario);
+  margin-top: 0.5rem;
+  font-weight: normal;
+}
+
+p {
+  font-size: 1rem;
+  color: #6b584c; /* Versión suave del chocolate para el texto */
+  margin-bottom: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transicion-rapida);
+}
+
+/* Componentes Globales e Interactivos */
+
+/* Botones con estilo pastelería */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--borde-redondeado-lg);
+  border: none;
+  cursor: pointer;
+  transition: var(--transicion-rapida);
+  text-align: center;
+}
+
+.btn-primario {
+  background-color: var(--color-acento);
+  color: white;
+  box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3);
+}
+
+.btn-primario:hover {
+  background-color: #d16649;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(224, 122, 95, 0.4);
+}
+
+.btn-secundario {
+  background-color: transparent;
+  color: var(--color-oscuro);
+  border: 2px solid var(--color-primario);
+}
+
+.btn-secundario:hover {
+  background-color: var(--color-secundario);
+  color: var(--color-oscuro);
+}
+
+/* Tarjetas de Postres / Productos */
+.card-postre {
+  background: white;
+  border-radius: var(--borde-redondeado);
+  overflow: hidden;
+  box-shadow: var(--sombra-suave);
+  transition: var(--transicion-rapida);
+  border: 1px solid rgba(212, 163, 115, 0.15);
+}
+
+.card-postre:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombra-media);
+}
+
+.card-postre img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: var(--transicion-rapida);
+}
+
+.card-postre:hover img {
+  transform: scale(1.03);
+}
+
+.card-cuerpo {
+  padding: 1.5rem;
+}
+
+.card-precio {
+  font-family: var(--fuente-titulos);
+  font-size: 1.3rem;
+  color: var(--color-acento);
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+/* Utilidades de Contenedores */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-padding {
+  padding: 5rem 0;
+}
+
+/* Inputs y Formularios (Para cotizaciones/contacto) */
+input, textarea, select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-primario);
+  background-color: var(--color-claro);
+  border-radius: var(--borde-redondeado);
+  font-family: var(--fuente-cuerpo);
+  color: var(--color-oscuro);
+  transition: var(--transicion-rapida);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-acento);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.15);
+}
+
+/* Barra de desplazamiento (Scroll) personalizada y coqueta */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-claro);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primario);
+  border-radius: var(--borde-redondeado);
+  border: 2px solid var(--color-claro);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-acento);
+}
