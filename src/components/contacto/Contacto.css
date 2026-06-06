@@ -97,7 +97,7 @@
 
 /* Form */
 .contacto__form-wrap {
-  background: white;
+  background: rgb(255, 255, 255);
   border-radius: var(--borde-redondeado-lg);
   padding: 2rem 2.5rem;
   box-shadow: var(--sombra-media);

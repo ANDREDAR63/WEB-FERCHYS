@@ -56,11 +56,17 @@ const productos = [
     descripcion: 'Refrescante bizcocho de limón con frosting de queso crema y ralladura.',
     precio: '$20.000', badge: '',
   },
+  {
+    id: 10, categoria: 'cheesecakes',
+    emoji: '🍋', nombre: 'Cheesecake de Limón',
+    descripcion: 'Refrescante cheesecake de limón con frosting de queso crema y ralladura.',
+    precio: '$20.000', badge: '',
+  },
 ];
 
 const categorias = [
   { id: 'todos', label: 'Todos' },
-  { id: 'tortas', label: '🎂 Tortas' },
+  { id: 'cheesecakes', label: '🎂 Cheesecakes' },
   { id: 'macarons', label: '🫧 Macarons' },
   { id: 'brownies', label: '🍫 Brownies' },
   { id: 'cupcakes', label: '🧁 Cupcakes' },

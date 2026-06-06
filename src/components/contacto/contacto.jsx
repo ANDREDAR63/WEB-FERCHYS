@@ -35,7 +35,7 @@ const Contacto = () => {
               <span className="contacto__info-icon">💬</span>
               <div>
                 <strong>WhatsApp</strong>
-                <p>+57 300 000 0000</p>
+                <p>+57 302 000 0000</p>
               </div>
             </div>
             <div className="contacto__info-card">
@@ -84,7 +84,7 @@ const Contacto = () => {
                   <label htmlFor="nombre">Tu nombre *</label>
                   <input
                     id="nombre" name="nombre" type="text"
-                    placeholder="María García"
+                    placeholder="María Pérez"
                     value={form.nombre} onChange={handleChange} required
                   />
                 </div>

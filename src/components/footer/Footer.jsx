@@ -41,7 +41,7 @@ const Footer = () => {
             <h4 className="footer__col-title">Productos</h4>
             <ul className="footer__links">
               <li><Link to="/catalogo">Tortas</Link></li>
-              <li><Link to="/catalogo">Macarons</Link></li>
+              <li><Link to="/catalogo">Cheesecakes</Link></li>
               <li><Link to="/catalogo">Brownies</Link></li>
               <li><Link to="/catalogo">Cupcakes</Link></li>
               <li><Link to="/catalogo">Cajas Surtidas</Link></li>
@@ -52,7 +52,7 @@ const Footer = () => {
             <h4 className="footer__col-title">Contacto</h4>
             <ul className="footer__links footer__links--info">
               <li>📍 Bogotá, Colombia</li>
-              <li>💬 +57 300 000 0000</li>
+              <li>💬 +57 302 543 0000</li>
               <li>📧 hola@ferchys.co</li>
               <li>🕐 Lun–Sáb: 8am – 7pm</li>
             </ul>
