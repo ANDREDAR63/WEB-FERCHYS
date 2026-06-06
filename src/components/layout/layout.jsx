@@ -1,18 +1,14 @@
-// src/components/Layout/Layout.jsx
 import React from 'react';
+import Navbar from '../navbar/Navbar';
+import Footer from '../footer/Footer';
+import './layout.css';
 
 const Layout = ({ children }) => {
   return (
     <div className="layout-container">
-      <header>
-        <h1>Ferchy's Postres</h1>
-      </header>
-      
-      <main>{children}</main>
-      
-      <footer>
-        <p>&copy; 2026 Ferchy's Postres - Gestión integral de pedidos</p>
-      </footer>
+      <Navbar />
+      <main className="layout-main">{children}</main>
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,140 @@
+import React, { useState } from 'react';
+import './Contacto.css';
+
+const Contacto = () => {
+  const [form, setForm] = useState({
+    nombre: '', telefono: '', producto: '', fecha: '', mensaje: '',
+  });
+  const [enviado, setEnviado] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const texto = `Hola Ferchy! 🧁 Me gustaría hacer un pedido:%0A%0A👤 *Nombre:* ${form.nombre}%0A📞 *Teléfono:* ${form.telefono}%0A🎂 *Producto:* ${form.producto}%0A📅 *Fecha:* ${form.fecha}%0A💬 *Mensaje:* ${form.mensaje}`;
+    window.open(`https://wa.me/573000000000?text=${texto}`, '_blank');
+    setEnviado(true);
+    setTimeout(() => setEnviado(false), 4000);
+  };
+
+  return (
+    <section className="contacto section-padding" id="contacto">
+      <div className="container">
+        <h2>Haz tu Pedido</h2>
+        <p className="contacto__intro">
+          ¿Tienes una ocasión especial? Cuéntanos y creamos algo único para ti.
+          Respondemos en menos de 2 horas.
+        </p>
+
+        <div className="contacto__grid">
+          {/* Info cards */}
+          <div className="contacto__info">
+            <div className="contacto__info-card">
+              <span className="contacto__info-icon">💬</span>
+              <div>
+                <strong>WhatsApp</strong>
+                <p>+57 300 000 0000</p>
+              </div>
+            </div>
+            <div className="contacto__info-card">
+              <span className="contacto__info-icon">📍</span>
+              <div>
+                <strong>Ubicación</strong>
+                <p>Bogotá, Colombia</p>
+              </div>
+            </div>
+            <div className="contacto__info-card">
+              <span className="contacto__info-icon">🕐</span>
+              <div>
+                <strong>Horarios</strong>
+                <p>Lun – Sáb: 8am – 7pm</p>
+              </div>
+            </div>
+            <div className="contacto__info-card">
+              <span className="contacto__info-icon">🚚</span>
+              <div>
+                <strong>Domicilio</strong>
+                <p>Consultar según zona</p>
+              </div>
+            </div>
+
+            {/* Redes */}
+            <div className="contacto__redes">
+              <p className="contacto__redes-titulo">Síguenos</p>
+              <div className="contacto__redes-links">
+                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">📸 Instagram</a>
+                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">📘 Facebook</a>
+                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">🎵 TikTok</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <div className="contacto__form-wrap">
+            {enviado && (
+              <div className="contacto__success">
+                ✅ ¡Pedido enviado! Te respondemos pronto 🧁
+              </div>
+            )}
+            <form className="contacto__form" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="nombre">Tu nombre *</label>
+                  <input
+                    id="nombre" name="nombre" type="text"
+                    placeholder="María García"
+                    value={form.nombre} onChange={handleChange} required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="telefono">Teléfono *</label>
+                  <input
+                    id="telefono" name="telefono" type="tel"
+                    placeholder="+57 300 000 0000"
+                    value={form.telefono} onChange={handleChange} required
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="producto">¿Qué deseas? *</label>
+                  <select id="producto" name="producto" value={form.producto} onChange={handleChange} required>
+                    <option value="">Selecciona...</option>
+                    <option>🎂 Torta personalizada</option>
+                    <option>🫧 Macarons</option>
+                    <option>🍫 Brownies</option>
+                    <option>🧁 Cupcakes</option>
+                    <option>🎁 Caja surtida</option>
+                    <option>✨ Otro / Consulta</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="fecha">Fecha del evento *</label>
+                  <input
+                    id="fecha" name="fecha" type="date"
+                    value={form.fecha} onChange={handleChange} required
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="mensaje">Cuéntanos más</label>
+                <textarea
+                  id="mensaje" name="mensaje" rows="4"
+                  placeholder="Número de personas, sabores, decoración, colores del evento..."
+                  value={form.mensaje} onChange={handleChange}
+                />
+              </div>
+              <button type="submit" className="contacto__submit">
+                💬 Enviar por WhatsApp
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contacto;
