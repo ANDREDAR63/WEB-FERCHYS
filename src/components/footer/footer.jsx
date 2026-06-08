@@ -21,9 +21,9 @@ const Footer = () => {
               una promesa de calidad y amor artesanal.
             </p>
             <div className="footer__social">
-              <a href="#" className="footer__social-btn" aria-label="Instagram"><FaInstagram /></a>
-              <a href="#" className="footer__social-btn" aria-label="Facebook"><FaFacebook /></a>
-              <a href="#" className="footer__social-btn" aria-label="TikTok"><FaTiktok /></a>
+              <a href="https://www.instagram.com/ferchyspostres?igsh=bTNudmp4dzdxZWo4" className="footer__social-btn" aria-label="Instagram"><FaInstagram /></a>
+              <a href="https://www.facebook.com/share/1RgeqKbXVP/" className="footer__social-btn" aria-label="Facebook"><FaFacebook /></a>
+              <a href="https://tiktok.com" className="footer__social-btn" aria-label="TikTok"><FaTiktok /></a>
               <a href="https://wa.me/573024798502" className="footer__social-btn" aria-label="WhatsApp"><FaWhatsapp /></a>
           </div>
         </div>

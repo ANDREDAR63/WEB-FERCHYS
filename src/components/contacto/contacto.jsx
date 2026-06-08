@@ -65,9 +65,9 @@ const Contacto = () => {
             <div className="contacto__redes">
               <h4 className="contacto__redes-titulo">Síguenos</h4>
               <div className="contacto__redes-links">
-                <a href="#" className="contacto__red" aria-label="Instagram"><FaInstagram />  Instagram </a>
-                <a href="#" className="contacto__red" aria-label="Facebook"><FaFacebook />  Facebook </a>
-                <a href="#" className="contacto__red" aria-label="TikTok"><FaTiktok />  TikTok </a>
+                <a href="https://www.instagram.com/ferchyspostres?igsh=bTNudmp4dzdxZWo4" className="contacto__red" aria-label="Instagram"><FaInstagram />  Instagram </a>
+                <a href="https://www.facebook.com/share/1RgeqKbXVP/" className="contacto__red" aria-label="Facebook"><FaFacebook />  Facebook </a>
+                <a href="https://tiktok.com" className="contacto__red" aria-label="TikTok"><FaTiktok />  TikTok </a>
                 <a href="https://wa.me/573024798502" className="contacto__red" aria-label="WhatsApp"><FaWhatsapp />  WhatsApp </a>
               </div>
             </div>
