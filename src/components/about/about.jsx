@@ -1,5 +1,5 @@
 import React from 'react';
-import './About.css';
+import './about.css';
 
 const valores = [
   { icon: '💕', titulo: 'Hecho con amor', texto: 'Cada postre lleva el cariño y la dedicación de quien lo prepara.' },

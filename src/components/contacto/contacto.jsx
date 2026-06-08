@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Contacto.css';
+import './contacto.css';
 import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
 const Contacto = () => {

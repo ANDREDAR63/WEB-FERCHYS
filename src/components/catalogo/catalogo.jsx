@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Catalogo.css';
+import './catalogo.css';
 
 const productos = [
   {
