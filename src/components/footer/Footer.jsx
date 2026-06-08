@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import logo from '../../assets/logo.ico';
+import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -11,7 +13,7 @@ const Footer = () => {
         <div className="container footer__grid">
           <div className="footer__brand">
             <div className="footer__logo">
-              <span>🧁</span>
+              <img src={logo} alt="Logo Ferchy" className="footer__logo-icon" />
               <span className="footer__logo-text">Ferchy<em>'</em>s Postres</span>
             </div>
             <p className="footer__tagline">
@@ -19,14 +21,12 @@ const Footer = () => {
               una promesa de calidad y amor artesanal.
             </p>
             <div className="footer__social">
-              <a href="#" className="footer__social-btn" aria-label="Instagram">📸</a>
-              <a href="#" className="footer__social-btn" aria-label="Facebook">📘</a>
-              <a href="#" className="footer__social-btn" aria-label="TikTok">🎵</a>
-              <a href="https://wa.me/573000000000" className="footer__social-btn footer__social-btn--wa"
-                target="_blank" rel="noreferrer" aria-label="WhatsApp">💬</a>
-            </div>
+              <a href="#" className="footer__social-btn" aria-label="Instagram"><FaInstagram /></a>
+              <a href="#" className="footer__social-btn" aria-label="Facebook"><FaFacebook /></a>
+              <a href="#" className="footer__social-btn" aria-label="TikTok"><FaTiktok /></a>
+              <a href="https://wa.me/573024798502" className="footer__social-btn" aria-label="WhatsApp"><FaWhatsapp /></a>
           </div>
-
+        </div>
           <div className="footer__col">
             <h4 className="footer__col-title">Menú</h4>
             <ul className="footer__links">
@@ -52,9 +52,9 @@ const Footer = () => {
             <h4 className="footer__col-title">Contacto</h4>
             <ul className="footer__links footer__links--info">
               <li>📍 Bogotá, Colombia</li>
-              <li>💬 +57 302 543 0000</li>
-              <li>📧 hola@ferchys.co</li>
-              <li>🕐 Lun–Sáb: 8am – 7pm</li>
+              <li>💬 +57 302 479 8502</li>
+              <li>📧 ferchyspostres@gmail.com</li>
+              <li>🕐 Lun–Vi: 8am – 7pm</li>
             </ul>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Contacto.css';
+import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
 const Contacto = () => {
   const [form, setForm] = useState({
@@ -13,8 +14,8 @@ const Contacto = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const texto = `Hola Ferchy! 🧁 Me gustaría hacer un pedido:%0A%0A👤 *Nombre:* ${form.nombre}%0A📞 *Teléfono:* ${form.telefono}%0A🎂 *Producto:* ${form.producto}%0A📅 *Fecha:* ${form.fecha}%0A💬 *Mensaje:* ${form.mensaje}`;
-    window.open(`https://wa.me/573000000000?text=${texto}`, '_blank');
+    const texto = `Hola Ferchy's! Me gustaría hacer un pedido:%0A%0A👤 *Nombre:* ${form.nombre}%0A📞 *Teléfono:* ${form.telefono}%0A🎂 *Producto:* ${form.producto}%0A📅 *Fecha:* ${form.fecha}%0A💬 *Mensaje:* ${form.mensaje}`;
+    window.open(`https://wa.me/573024798502?text=${texto}`, '_blank');
     setEnviado(true);
     setTimeout(() => setEnviado(false), 4000);
   };
@@ -35,7 +36,7 @@ const Contacto = () => {
               <span className="contacto__info-icon">💬</span>
               <div>
                 <strong>WhatsApp</strong>
-                <p>+57 302 000 0000</p>
+                <p>+57 302 479 8502</p>
               </div>
             </div>
             <div className="contacto__info-card">
@@ -49,7 +50,7 @@ const Contacto = () => {
               <span className="contacto__info-icon">🕐</span>
               <div>
                 <strong>Horarios</strong>
-                <p>Lun – Sáb: 8am – 7pm</p>
+                <p>Lun – Vi: 8am – 7pm</p>
               </div>
             </div>
             <div className="contacto__info-card">
@@ -62,11 +63,12 @@ const Contacto = () => {
 
             {/* Redes */}
             <div className="contacto__redes">
-              <p className="contacto__redes-titulo">Síguenos</p>
+              <h4 className="contacto__redes-titulo">Síguenos</h4>
               <div className="contacto__redes-links">
-                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">📸 Instagram</a>
-                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">📘 Facebook</a>
-                <a href="#" className="contacto__red" target="_blank" rel="noreferrer">🎵 TikTok</a>
+                <a href="#" className="contacto__red" aria-label="Instagram"><FaInstagram />  Instagram </a>
+                <a href="#" className="contacto__red" aria-label="Facebook"><FaFacebook />  Facebook </a>
+                <a href="#" className="contacto__red" aria-label="TikTok"><FaTiktok />  TikTok </a>
+                <a href="https://wa.me/573024798502" className="contacto__red" aria-label="WhatsApp"><FaWhatsapp />  WhatsApp </a>
               </div>
             </div>
           </div>

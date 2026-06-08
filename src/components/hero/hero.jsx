@@ -15,14 +15,14 @@ const Hero = () => {
 
       <div className="hero__container">
         <div className="hero__content">
-          <span className="hero__badge">🎀 Postres artesanales hechos con amor</span>
+          <span className="hero__badge">"Sabores que nacen del corazón"</span>
           <h1 className="hero__title">
             El sabor que
             <br />
             <em>endulza</em> tu día
           </h1>
           <p className="hero__subtitle">
-            Tortas, macarons, brownies y más — preparados a mano con
+            Chessecake, alfajores, profiteroles y más — prepardos artesanalmente, con
             ingredientes de la mejor calidad para cada ocasión especial.
           </p>
           <div className="hero__actions">

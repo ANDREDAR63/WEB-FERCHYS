@@ -1,13 +1,13 @@
 /* ==========================================================================
    Ferchys Postres - Estilos Globales (index.css)
-   Paleta de colores: Cálida, dulce y profesional (Pasteles, chocolate y crema)
+   Paleta de colores: Cálida, y dulce (Pasteles, chocolate y crema)
    ========================================================================== */
 
 /* Importación de fuentes de Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
 
 :root {
-  /* Tu Nueva Paleta de Colores Real (Rosa, Ciruela y Blanco) */
+  
   --color-primario: #EE74A5;      /* Rosa Fresa / Chicle */
   --color-secundario: #fde8f0;    /* Un rosa muy tierno y clarito para fondos */
   --color-acento: #EE74A5;        /* El mismo rosa para botones destacados */

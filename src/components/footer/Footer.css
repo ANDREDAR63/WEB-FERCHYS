@@ -17,8 +17,15 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.footer__logo-icon {
+  height: 4rem;      
+  width: auto;         
+  object-fit: contain; 
+  display: block;      
 }
 
 .footer__logo span:first-child { font-size: 1.8rem; }
@@ -44,30 +51,19 @@
 
 .footer__social {
   display: flex;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
 .footer__social-btn {
-  width: 38px; height: 38px;
-  background: hwb(0 100% 0% / 0.08);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  font-size: 1.5rem; 
+  color: rgba(255,255,255,0.6); 
+  transition: color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
 }
-
 .footer__social-btn:hover {
-  background: rgba(255,255,255,0.15);
+  color: var(--color-primario);
   transform: translateY(-3px);
-}
-
-.footer__social-btn--wa {
-  background: rgba(37, 211, 102, 0.2);
-}
-.footer__social-btn--wa:hover {
-  background: rgba(37, 211, 102, 0.35);
 }
 
 .footer__col-title {

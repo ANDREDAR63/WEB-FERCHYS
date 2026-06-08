@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import logo from '../../assets/logo.ico';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -25,9 +26,9 @@ const Navbar = () => {
       <div className="navbar__container">
 
         <NavLink to="/" className="navbar__logo" onClick={() => setMenuOpen(false)}>
-          <span className="navbar__logo-icon">🧁</span>
+          <img src={logo} alt="Logo Ferchy" className="navbar__logo-icon" />
           <span className="navbar__logo-text">
-            Ferchy<span>'</span>s
+          Ferchy<span>'</span>s Postres
           </span>
         </NavLink>
 
