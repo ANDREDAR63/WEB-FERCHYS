@@ -1,75 +1,56 @@
 import React, { useState } from 'react';
 import './catalogo.css';
+const imagenes = import.meta.glob('../../assets/*', { eager: true });
+const obtenerImagen = (nombreArchivo) => {
+  const ruta = Object.keys(imagenes).find(key => key.includes(nombreArchivo));
+  return ruta ? imagenes[ruta].default : '';
+};
 
 const productos = [
-  {
-    id: 1, categoria: 'tortas',
-    emoji: '🎂', nombre: 'Torta de Cumpleaños',
-    descripcion: 'Bizcocho húmedo con relleno de crema de vainilla y frutos rojos. Personalizable.',
-    precio: '$45.000', badge: '⭐ Favorita',
+    {
+    id: 1, categoria: 'horneados',
+    img:obtenerImagen('favicon-rosa'), nombre: 'Suspiros',
+    descripcion: 'Deliciosos merengues para endulzar tu día.',
+    precio: '$3.000', badge: '',
+   
   },
   {
-    id: 2, categoria: 'tortas',
-    emoji: '🍫', nombre: 'Torta de Chocolate',
-    descripcion: 'Tres capas de bizcocho de chocolate belga con ganache y almendras tostadas.',
-    precio: '$50.000', badge: '',
+    id: 2, categoria: 'horneados',
+    img:obtenerImagen('favicon-rosa'), nombre: 'Profiteroles',
+    descripcion: 'Repollas rellenas de arequipe artesanal para una nota extra de sabor.',
+    precio: '$5.000', badge: '',
   },
   {
-    id: 3, categoria: 'tortas',
-    emoji: '🍓', nombre: 'Torta de Fresas',
-    descripcion: 'Base esponjosa con crema chantilly y fresas frescas. Ligera y deliciosa.',
-    precio: '$42.000', badge: '',
+    id: 3, categoria: 'horneados',
+    img:obtenerImagen('favicon-rosa'), nombre: 'Alfajores',
+    descripcion: 'Dulce tradicional argentino elaborado con dos delicadas galletas rellenas de arequipe y coco.',
+    precio: '$5.000', badge: '',
   },
   {
-    id: 4, categoria: 'macarons',
-    emoji: '🫧', nombre: 'Macarons Clásicos',
-    descripcion: 'Caja de 12 unidades. Sabores: vainilla, frambuesa, limón, café y chocolate.',
-    precio: '$28.000', badge: '🎀 Especial',
+    id: 4, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_limon'), nombre: 'Cheesecake de limón',
+    descripcion: 'Postre con base de galleta dulce y relleno de sabor a limón natural.',
+    precio: '$7.000', badge: '⭐ Favorita',
+   
   },
   {
-    id: 5, categoria: 'macarons',
-    emoji: '🌸', nombre: 'Macarons de Rosa',
-    descripcion: 'Macarons perfumados con agua de rosas y rellenos de ganache de fresa.',
-    precio: '$30.000', badge: '',
+    id: 5, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_maracuya'), nombre: 'Cheesecake de maracuyá',
+    descripcion: 'Postre con base de galleta dulce y relleno de sabor a maracuyá natural.',
+    precio: '$7.000', badge: '⭐ Favorita',
   },
   {
-    id: 6, categoria: 'brownies',
-    emoji: '🍫', nombre: 'Brownies Clásicos',
-    descripcion: 'Caja de 9. Bordes crujientes, centro húmedo. Con chips de chocolate extra.',
-    precio: '$22.000', badge: '🔥 Popular',
-  },
-  {
-    id: 7, categoria: 'brownies',
-    emoji: '🥜', nombre: 'Brownies Nutella',
-    descripcion: 'Irresistibles brownies marmoleados con Nutella y avellanas tostadas.',
-    precio: '$25.000', badge: '',
-  },
-  {
-    id: 8, categoria: 'cupcakes',
-    emoji: '🧁', nombre: 'Cupcakes Decorados',
-    descripcion: 'Caja de 6. Bizcocho esponjoso con buttercream artesanal. Personalizables.',
-    precio: '$20.000', badge: '✨ Nuevo',
-  },
-  {
-    id: 9, categoria: 'cupcakes',
-    emoji: '🍋', nombre: 'Cupcakes de Limón',
-    descripcion: 'Refrescante bizcocho de limón con frosting de queso crema y ralladura.',
-    precio: '$20.000', badge: '',
-  },
-  {
-    id: 10, categoria: 'cheesecakes',
-    emoji: '🍋', nombre: 'Cheesecake de Limón',
-    descripcion: 'Refrescante cheesecake de limón con frosting de queso crema y ralladura.',
-    precio: '$20.000', badge: '',
-  },
+    id: 6, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_arandano'), nombre: 'Cheesecake de arándano',
+    descripcion: 'Postre con base de galleta dulce y relleno de sabor a arándano natural.',
+    precio: '$7.000', badge: '⭐ Favorita',    
+  }
 ];
 
 const categorias = [
   { id: 'todos', label: 'Todos' },
-  { id: 'cheesecakes', label: '🎂 Cheesecakes' },
-  { id: 'macarons', label: '🫧 Macarons' },
-  { id: 'brownies', label: '🍫 Brownies' },
-  { id: 'cupcakes', label: '🧁 Cupcakes' },
+  { id: 'cheesecakes', label: '🍰 Cheesecakes' },
+  { id: 'horneados', label: '🍪 horneados' },
 ];
 
 const Catalogo = () => {
@@ -109,7 +90,7 @@ const Catalogo = () => {
                 <span className="card-producto__badge">{producto.badge}</span>
               )}
               <div className="card-producto__imagen">
-                <span className="card-producto__emoji">{producto.emoji}</span>
+                <img src={producto.img} alt={producto.nombre} className="card-producto__imagen"/>
               </div>
               <div className="card-cuerpo">
                 <h3 className="card-producto__nombre">{producto.nombre}</h3>
@@ -118,7 +99,7 @@ const Catalogo = () => {
                   <span className="card-precio">{producto.precio}</span>
                   <a
                     className="card-producto__btn"
-                    href={`https://wa.me/573000000000?text=Hola! Me interesa pedir: ${producto.nombre}`}
+                    href={`https://wa.me/573024798502?text=Hola Ferchy's! Me interesa pedir: ${producto.nombre}`}
                     target="_blank"
                     rel="noreferrer"
                   >

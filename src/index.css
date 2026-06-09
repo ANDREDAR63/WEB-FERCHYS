@@ -66,12 +66,13 @@ h3 { font-size: 1.5rem; }
 
 /* Decoración sutil para los títulos principales (H2) */
 h2::after {
-  content: '✿';
+  content: '​🩷';
   display: block;
   font-size: 1.2rem;
   color: var(--color-primario);
   margin-top: 0.5rem;
   font-weight: normal;
+  justify-content:center;
 }
 
 p {
@@ -172,7 +173,7 @@ a {
 }
 
 .section-padding {
-  padding: 5rem 0;
+  padding: 2rem 0;
 }
 
 /* Inputs y Formularios (Para cotizaciones/contacto) */

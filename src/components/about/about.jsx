@@ -6,7 +6,7 @@ const valores = [
   { icon: '🌿', titulo: 'Ingredientes frescos', texto: 'Usamos solo ingredientes de calidad, seleccionados con cuidado.' },
   { icon: '🎨', titulo: 'Totalmente personalizable', texto: 'Tu visión, nuestra creación. Adaptamos cada pedido a tu gusto.' },
   { icon: '🚀', titulo: 'Entrega puntual', texto: 'Tu evento merece todo a tiempo. Cumplimos nuestra promesa.' },
-];
+ ]
 
 const About = () => {
   return (
@@ -17,19 +17,7 @@ const About = () => {
           <div className="about__visual">
             <div className="about__img-card about__img-card--main">
               <span className="about__big-emoji">👩‍🍳</span>
-              <p className="about__img-label">Ferchy en la cocina</p>
-            </div>
-            <div className="about__img-card about__img-card--float about__img-card--float1">
-              <span>🧁</span>
-              <small>Macarons del día</small>
-            </div>
-            <div className="about__img-card about__img-card--float about__img-card--float2">
-              <span>🏆</span>
-              <small>Calidad garantizada</small>
-            </div>
-            <div className="about__years">
-              <span className="about__years-num">3+</span>
-              <span className="about__years-label">años de experiencia</span>
+              <p className="about__img-label">Ferchy's en la cocina</p>
             </div>
           </div>
 
