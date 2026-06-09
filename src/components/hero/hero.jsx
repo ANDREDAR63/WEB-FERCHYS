@@ -64,7 +64,7 @@ const Hero = () => {
           <div className="hero__cake-ring" />
           <div className="hero__cake-card">
             <img 
-              src={obtenerImagen('cheesecakes-granp')} 
+              src={obtenerImagen('cheesecakes-grandes')} 
               alt="img_cheesecakes_refractaria " 
               className="hero__cake-imagen"
             />

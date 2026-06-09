@@ -7,7 +7,8 @@
   position: relative;
   overflow: hidden;
   background: linear-gradient(160deg, #fff9fb 0%, #fff 50%, #fde8f0 100%);
-  padding-top: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
 }
 
 /* Decorative blobs */
@@ -142,6 +143,7 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  padding-bottom: 1rem;
 }
 
 .hero__stat {
@@ -290,4 +292,38 @@
   .hero__actions { justify-content: center; }
   .hero__stats { justify-content: center; }
   .hero__visual { height: 300px; }
+}
+@media (max-width: 900px) {
+  .hero__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+  .hero__subtitle { max-width: 100%; }
+  .hero__actions { justify-content: center; }
+  .hero__stats { justify-content: center; }
+
+  .hero__visual {
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+
+  .hero__cake-card {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 1.2rem;
+  }
+
+  .hero__cake-ring {
+    width: 200px;
+    height: 200px;
+  }
+
+  .hero__float { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero__cake-card {
+    max-width: 260px;
+  }
 }
