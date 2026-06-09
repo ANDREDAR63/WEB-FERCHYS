@@ -206,8 +206,11 @@
   z-index: 2;
 }
 
-.hero__cake-emoji {
-  font-size: 5rem;
+.hero__cake-imagen {
+  height:auto;
+  width: 100%;
+  max-width:100%;
+  border-radius: 16px;
   display: block;
   margin-bottom: 1rem;
   animation: cakeWobble 3s ease-in-out infinite;

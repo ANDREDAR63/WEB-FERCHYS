@@ -41,9 +41,32 @@ const productos = [
   },
   {
     id: 6, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_chocolate'), nombre: 'Cheesecake de chocolate',
+    descripcion: 'Postre con base de galleta oreo y sabor a chocolate para los mas amantes de el dulce.',
+    precio: '$7.000', badge: '',    
+  },
+  {
+    id: 7, categoria: 'cheesecakes',
     img:obtenerImagen('cheesecake_arandano'), nombre: 'Cheesecake de arándano',
     descripcion: 'Postre con base de galleta dulce y relleno de sabor a arándano natural.',
-    precio: '$7.000', badge: '⭐ Favorita',    
+    precio: '$7.000', badge: '',    
+  },
+  {
+    id: 8, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_papayuela'), nombre: 'Cheesecake de papayuela',
+    descripcion: 'Postre con base de galleta dulce y relleno de sabor a papayuela natural.',
+    precio: '$7.000', badge: '',    
+  },
+  {
+    id: 9, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecake_redvelvet'), nombre: 'Cheesecake de red velvet',
+    descripcion: 'Postre con base de torta red velvet y sabor a vainilla para los gustos mas refinados.',
+    precio: '$7.000', badge: '',    
+  },
+  { id: 10, categoria: 'cheesecakes',
+    img:obtenerImagen('cheesecakes-grandes'), nombre: 'Refractaria familiar de cheesecake',
+    descripcion: 'Tienes un evento para compartir y quieres sorprender a tus invitados? esta es la opción perfecta para ti, una refractaria que rinde 10-15 porciones para que todos puedan disfrutar de un postre diferente.',
+    precio: '$40.000', badge: '⭐ Favorita',
   }
 ];
 

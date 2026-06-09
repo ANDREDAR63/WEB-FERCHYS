@@ -81,7 +81,7 @@
 }
 
 .card-producto__imagen {
-  height: 180px;
+  width: 100%;
   background: linear-gradient(135deg, #fde8f0, #fff0f5);
   display: flex;
   align-items: center;

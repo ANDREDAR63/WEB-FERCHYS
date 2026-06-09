@@ -1,11 +1,15 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import './hero.css';
 
-const Hero = () => {
-  const handleScroll = (href) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-  };
+const imagenes = import.meta.glob('../../assets/*', { eager: true });
 
+const obtenerImagen = (nombreArchivo) => {
+  const ruta = Object.keys(imagenes).find(key => key.includes(nombreArchivo));
+  return ruta ? imagenes[ruta].default : '';
+};
+
+const Hero = () => {
   return (
     <section className="hero" id="inicio">
       {/* Decorative blobs */}
@@ -22,17 +26,22 @@ const Hero = () => {
             <em>endulza</em> tu día
           </h1>
           <p className="hero__subtitle">
-            Chessecake, alfajores, profiteroles y más — prepardos artesanalmente, con
+            Cheesecakes, alfajores, profiteroles y más — preparados artesanalmente, con
             ingredientes de la mejor calidad para cada ocasión especial.
           </p>
+
           <div className="hero__actions">
-            <button className="hero__btn hero__btn--primary" onClick={() => handleScroll('#catalogo')}>
+            {/* Botón Ver Catálogo conectado con NavLink y clases BEM intactas */}
+            <NavLink to="/catalogo" className="hero__btn hero__btn--primary">
               Ver Catálogo ✨
-            </button>
-            <button className="hero__btn hero__btn--secondary" onClick={() => handleScroll('#contacto')}>
+            </NavLink>
+
+            {/* Botón Hacer Pedido ahora también como NavLink hacia la ruta de contacto */}
+            <NavLink to="/contacto" className="hero__btn hero__btn--secondary">
               Hacer Pedido
-            </button>
+            </NavLink>
           </div>
+
           <div className="hero__stats">
             <div className="hero__stat">
               <span className="hero__stat-num">200+</span>
@@ -54,19 +63,19 @@ const Hero = () => {
         <div className="hero__visual">
           <div className="hero__cake-ring" />
           <div className="hero__cake-card">
-            <div className="hero__cake-emoji">🎂</div>
-            <p className="hero__cake-label">Torta Personalizada</p>
-            <p className="hero__cake-sub">Desde $35.000</p>
+            <img 
+              src={obtenerImagen('cheesecakes-granp')} 
+              alt="img_cheesecakes_refractaria " 
+              className="hero__cake-imagen"
+            />
+            <p className="hero__cake-label">Cheesecake familiar en refractaria</p>
+            <p className="hero__cake-sub">Desde $40.000</p>
           </div>
-          <div className="hero__float hero__float--1">🧁</div>
-          <div className="hero__float hero__float--2">🍓</div>
-          <div className="hero__float hero__float--3">🌸</div>
-          <div className="hero__float hero__float--4">🍫</div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="hero__scroll" onClick={() => handleScroll('#catalogo')}>
+      {/* Scroll indicator original sin funciones externas que rompan el renderizado */}
+      <div className="hero__scroll">
         <span className="hero__scroll-dot" />
       </div>
     </section>
@@ -74,3 +83,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
