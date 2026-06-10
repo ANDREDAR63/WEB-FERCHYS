@@ -30,7 +30,7 @@ const About = () => {
               lleno de sabor, creatividad y amor.
             </p>
             <p className="about__text">
-              Cada torta, macaron o brownie que sale de nuestra cocina lleva horas de dedicación.
+              Cada torta, alfajor o cheesecake que sale de nuestra cocina lleva horas de dedicación.
               Creemos que los postres son más que dulces — son recuerdos que se quedan en el corazón.
             </p>
 

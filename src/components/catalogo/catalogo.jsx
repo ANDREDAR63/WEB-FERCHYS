@@ -67,6 +67,11 @@ const productos = [
     img:obtenerImagen('cheesecakes-grandes'), nombre: 'Refractaria familiar de cheesecake',
     descripcion: 'Tienes un evento para compartir y quieres sorprender a tus invitados? esta es la opción perfecta para ti, una refractaria que rinde 10-15 porciones para que todos puedan disfrutar de un postre diferente.',
     precio: '$40.000', badge: '⭐ Favorita',
+  },
+  { id: 11, categoria: 'horneados' ,
+    img:obtenerImagen('favicon-rosa'), nombre: 'Torta de arándanos',
+    descripcion: 'Deliciosa torta de arándanos frescos.',
+    precio: '$3.000', badge: 'Nuevo',
   }
 ];
 

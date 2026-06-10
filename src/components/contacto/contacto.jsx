@@ -91,7 +91,7 @@ const Contacto = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="telefono">Teléfono *</label>
+                  <label htmlFor="telefono">Teléfono/ Celular *</label>
                   <input
                     id="telefono" name="telefono" type="tel"
                     placeholder="+57 300 000 0000"
@@ -104,16 +104,16 @@ const Contacto = () => {
                   <label htmlFor="producto">¿Qué deseas? *</label>
                   <select id="producto" name="producto" value={form.producto} onChange={handleChange} required>
                     <option value="">Selecciona...</option>
-                    <option>🎂 Torta personalizada</option>
-                    <option>🫧 Macarons</option>
-                    <option>🍫 Brownies</option>
-                    <option>🧁 Cupcakes</option>
-                    <option>🎁 Caja surtida</option>
-                    <option>✨ Otro / Consulta</option>
+                    <option>Refractaria cheesecake familiar</option>
+                    <option>Alfajores</option>
+                    <option>Suspiros</option>
+                    <option>Cheesecake</option>
+                    <option>Caja surtida</option>
+                    <option>Otro / Consulta</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="fecha">Fecha del evento *</label>
+                  <label htmlFor="fecha">¿Cuándo lo necesitas? *</label>
                   <input
                     id="fecha" name="fecha" type="date"
                     value={form.fecha} onChange={handleChange} required
@@ -124,7 +124,7 @@ const Contacto = () => {
                 <label htmlFor="mensaje">Cuéntanos más</label>
                 <textarea
                   id="mensaje" name="mensaje" rows="4"
-                  placeholder="Número de personas, sabores, decoración, colores del evento..."
+                  placeholder="Número de personas, sabores, decoración..."
                   value={form.mensaje} onChange={handleChange}
                 />
               </div>

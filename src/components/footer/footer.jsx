@@ -40,10 +40,9 @@ const Footer = () => {
           <div className="footer__col">
             <h4 className="footer__col-title">Productos</h4>
             <ul className="footer__links">
-              <li><Link to="/catalogo">Tortas</Link></li>
               <li><Link to="/catalogo">Cheesecakes</Link></li>
-              <li><Link to="/catalogo">Brownies</Link></li>
-              <li><Link to="/catalogo">Cupcakes</Link></li>
+              <li><Link to="/catalogo">Alfajores</Link></li>
+              <li><Link to="/catalogo">Profiteroles</Link></li>
               <li><Link to="/catalogo">Cajas Surtidas</Link></li>
             </ul>
           </div>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="50" fill="#B5284A"/>
+  <path d="M50,78 C25,61 12,43 12,31 C12,20 21,13 30,16 C39,19 50,29 50,29 C50,29 61,19 70,16 C79,13 88,20 88,31 C88,43 75,61 50,78 Z" fill="#FFF5EE" opacity="0.2"/>
+  <text x="52" y="78" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="900" fill="#FFF5EE" font-style="italic">F</text>
+  <path d="M72,14 C72,9 65,7 62,11 C59,7 52,9 52,14 C52,21 62,28 62,28 C62,28 72,21 72,14 Z" fill="#F5A0B8"/>
+</svg>
