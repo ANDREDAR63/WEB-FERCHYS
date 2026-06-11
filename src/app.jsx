@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom'; // Quitamos BrowserRouter de los imports
+import { Routes, Route } from 'react-router-dom'; // <-- Asegúrate de que NO tenga BrowserRouter aquí
 import Layout from './components/layout/layout';
 import Hero from './components/hero/hero';
 import Catalogo from './components/catalogo/catalogo';
