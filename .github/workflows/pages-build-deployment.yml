@@ -1,3 +1,9 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -7,27 +13,19 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-
-      # 1. Configurar Node.js para poder compilar React/Vite
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
-
-      # 2. Instalar dependencias
+          node-version: '20'
       - name: Install dependencies
         run: npm install
-
-      # 3. Construir el proyecto (genera la carpeta 'dist')
       - name: Build
         run: npm run build
-
-      - uses: actions/configure-pages@v5
-
-      # 4. Subir la carpeta 'dist' en lugar de la raíz
-      - uses: actions/upload-pages-artifact@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist' 
-
-      - uses: actions/deploy-pages@v5
+          path: './dist' 
+      - name: Deploy
+        uses: actions/deploy-pages@v5
