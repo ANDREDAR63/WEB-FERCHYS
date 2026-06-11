@@ -1,0 +1,15 @@
+<!-- public/404.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>
+      const repo = '/WEB-FERCHYS';
+      const path = window.location.pathname.replace(repo, '');
+      const search = window.location.search;
+      const hash = window.location.hash;
+      const url = repo + '/?p=' + encodeURIComponent(path + search) + hash;
+      window.location.replace(url);
+    </script>
+  </head>
+</html>
