@@ -30,14 +30,14 @@ const productos = [
     id: 4, categoria: 'cheesecakes',
     img:obtenerImagen('cheesecake_limon'), nombre: 'Cheesecake de limón',
     descripcion: 'Postre con base de galleta dulce y relleno de sabor a limón natural.',
-    precio: '$7.000', badge: '⭐ Favorita',
+    precio: '$7.000', badge: 'Favorita',
    
   },
   {
     id: 5, categoria: 'cheesecakes',
     img:obtenerImagen('cheesecake_maracuya'), nombre: 'Cheesecake de maracuyá',
     descripcion: 'Postre con base de galleta dulce y relleno de sabor a maracuyá natural.',
-    precio: '$7.000', badge: '⭐ Favorita',
+    precio: '$7.000', badge: 'Favorita',
   },
   {
     id: 6, categoria: 'cheesecakes',
@@ -66,7 +66,7 @@ const productos = [
   { id: 10, categoria: 'cheesecakes',
     img:obtenerImagen('cheesecakes-grandes'), nombre: 'Refractaria familiar de cheesecake',
     descripcion: 'Tienes un evento para compartir y quieres sorprender a tus invitados? esta es la opción perfecta para ti, una refractaria que rinde 10-15 porciones para que todos puedan disfrutar de un postre diferente.',
-    precio: '$40.000', badge: '⭐ Favorita',
+    precio: '$40.000', badge: 'Favorita',
   },
   { id: 11, categoria: 'horneados' ,
     img:obtenerImagen('favicon-rosa'), nombre: 'Torta de arándanos',
@@ -77,8 +77,8 @@ const productos = [
 
 const categorias = [
   { id: 'todos', label: 'Todos' },
-  { id: 'cheesecakes', label: '🍰 Cheesecakes' },
-  { id: 'horneados', label: '🍪 horneados' },
+  { id: 'cheesecakes', label: 'Cheesecakes' },
+  { id: 'horneados', label: 'Horneados' },
 ];
 
 const Catalogo = () => {
@@ -131,7 +131,7 @@ const Catalogo = () => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Pedir 💬
+                    Pedir
                   </a>
                 </div>
               </div>

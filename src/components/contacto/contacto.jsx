@@ -33,28 +33,24 @@ const Contacto = () => {
           {/* Info cards */}
           <div className="contacto__info">
             <div className="contacto__info-card">
-              <span className="contacto__info-icon">💬</span>
               <div>
                 <strong>WhatsApp</strong>
                 <p>+57 302 479 8502</p>
               </div>
             </div>
             <div className="contacto__info-card">
-              <span className="contacto__info-icon">📍</span>
               <div>
                 <strong>Ubicación</strong>
                 <p>Bogotá, Colombia</p>
               </div>
             </div>
             <div className="contacto__info-card">
-              <span className="contacto__info-icon">🕐</span>
               <div>
                 <strong>Horarios</strong>
                 <p>Lun – Vi: 8am – 7pm</p>
               </div>
             </div>
             <div className="contacto__info-card">
-              <span className="contacto__info-icon">🚚</span>
               <div>
                 <strong>Domicilio</strong>
                 <p>Consultar según zona</p>
@@ -77,7 +73,7 @@ const Contacto = () => {
           <div className="contacto__form-wrap">
             {enviado && (
               <div className="contacto__success">
-                ✅ ¡Pedido enviado! Te respondemos pronto 🧁
+              ¡Pedido enviado! Te respondemos pronto
               </div>
             )}
             <form className="contacto__form" onSubmit={handleSubmit}>
@@ -129,7 +125,7 @@ const Contacto = () => {
                 />
               </div>
               <button type="submit" className="contacto__submit">
-                💬 Enviar por WhatsApp
+                 Enviar por WhatsApp
               </button>
             </form>
           </div>

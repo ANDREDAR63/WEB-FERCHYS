@@ -50,10 +50,10 @@ const Footer = () => {
           <div className="footer__col">
             <h4 className="footer__col-title">Contacto</h4>
             <ul className="footer__links footer__links--info">
-              <li>📍 Bogotá, Colombia</li>
-              <li>💬 +57 302 479 8502</li>
-              <li>📧 ferchyspostres@gmail.com</li>
-              <li>🕐 Lun–Vi: 8am – 7pm</li>
+              <li>Bogotá, Colombia</li>
+              <li>+57 302 479 8502</li>
+              <li>ferchyspostres@gmail.com</li>
+              <li>Lun–Vi: 8am – 7pm</li>
             </ul>
           </div>
         </div>
@@ -62,7 +62,7 @@ const Footer = () => {
       <div className="footer__bottom">
         <div className="container footer__bottom-inner">
           <p>© {year} Ferchy's Postres. Todos los derechos reservados.</p>
-          <p className="footer__made">Hecho con 💕 en Colombia</p>
+          <p className="footer__made">Hecho con amor en Colombia</p>
         </div>
       </div>
     </footer>

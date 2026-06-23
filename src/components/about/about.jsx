@@ -2,10 +2,10 @@ import React from 'react';
 import './about.css';
 
 const valores = [
-  { icon: '💕', titulo: 'Hecho con amor', texto: 'Cada postre lleva el cariño y la dedicación de quien lo prepara.' },
-  { icon: '🌿', titulo: 'Ingredientes frescos', texto: 'Usamos solo ingredientes de calidad, seleccionados con cuidado.' },
-  { icon: '🎨', titulo: 'Totalmente personalizable', texto: 'Tu visión, nuestra creación. Adaptamos cada pedido a tu gusto.' },
-  { icon: '🚀', titulo: 'Entrega puntual', texto: 'Tu evento merece todo a tiempo. Cumplimos nuestra promesa.' },
+  { titulo: 'Hecho con amor', texto: 'Cada postre lleva el cariño y la dedicación de quien lo prepara.' },
+  { titulo: 'Ingredientes frescos', texto: 'Usamos solo ingredientes de calidad, seleccionados con cuidado.' },
+  { titulo: 'Totalmente personalizable', texto: 'Tu visión, nuestra creación. Adaptamos cada pedido a tu gusto.' },
+  { titulo: 'Entrega puntual', texto: 'Tu evento merece todo a tiempo. Cumplimos nuestra promesa.' },
  ]
 
 const About = () => {

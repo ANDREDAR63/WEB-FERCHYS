@@ -33,7 +33,7 @@ const Hero = () => {
           <div className="hero__actions">
             {/* Botón Ver Catálogo conectado con NavLink y clases BEM intactas */}
             <NavLink to="/catalogo" className="hero__btn hero__btn--primary">
-              Ver Catálogo ✨
+              Ver Catálogo
             </NavLink>
 
             {/* Botón Hacer Pedido ahora también como NavLink hacia la ruta de contacto */}
