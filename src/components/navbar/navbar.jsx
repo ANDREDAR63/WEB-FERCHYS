@@ -49,11 +49,11 @@ const Navbar = () => {
           ))}
           <li>
             <NavLink
-              to="/contacto"
+              to="/login"
               className="navbar__cta"
               onClick={() => setMenuOpen(false)}
             >
-              Hacer Pedido
+              Iniciar Sesión
             </NavLink>
           </li>
         </ul>
