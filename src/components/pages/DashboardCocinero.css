@@ -1,0 +1,87 @@
+.dashboard-cocinero {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f8f8;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-cocinero__sidebar {
+  width: 260px;
+  background: #2f2f2f;
+  color: #fff;
+  padding: 24px 16px;
+}
+
+.dashboard-cocinero__logo h2 {
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+}
+
+.dashboard-cocinero__nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-cocinero__nav li + li {
+  margin-top: 10px;
+}
+
+.dashboard-cocinero__nav-link {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.dashboard-cocinero__nav-link:hover,
+.dashboard-cocinero__nav-link.active {
+  background: #ff7f50;
+}
+
+.dashboard-cocinero__content {
+  flex: 1;
+  padding: 24px;
+}
+
+.dashboard-cocinero__header {
+  margin-bottom: 20px;
+}
+
+.dashboard-cocinero__section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-cocinero__item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.dashboard-cocinero__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dashboard-cocinero__button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dashboard-cocinero__button--primary {
+  background: #28a745;
+  color: white;
+}
+
+.dashboard-cocinero__button--secondary {
+  background: #ffc107;
+  color: #222;
+}

@@ -5,7 +5,7 @@ import Hero from './components/hero/hero';
 import Catalogo from './components/catalogo/catalogo';
 import About from './components/about/about';
 import Contacto from './components/contacto/contacto';
-
+import DashboardCocinero from './components/pages/DashboardCocinero';
 function App() {
   return (
     <Layout>
@@ -14,6 +14,7 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/nosotros" element={<About />} />
         <Route path="/contacto" element={<Contacto />} />
+        <Route path="/dashboard-cocinero" element={<DashboardCocinero />} />
       </Routes>
     </Layout>
   );
