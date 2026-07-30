@@ -32,9 +32,17 @@ export default function Registration() {
     e.preventDefault();
     setErrorMensaje('');
 
-    // Validación de longitud mínima de contraseña
-    if (clave.length < 6) {
-      setErrorMensaje('⚠️ La contraseña debe tener al menos 6 caracteres.');
+    // Expresión regular que valida:
+    // - Al menos una minúscula (?=.*[a-z])
+    // - Al menos una mayúscula (?=.*[A-Z])
+    // - Al menos un número (?=.*\d)
+    // - Al menos un carácter especial o símbolo (?=.*[@$!%*?&#._-])
+    // - Mínimo 6 caracteres ({6,})
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{6,}$/;
+
+    // Validación de seguridad de la contraseña
+    if (!regexPassword.test(clave)) {
+      setErrorMensaje('⚠️ La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).');
       return;
     }
 
@@ -107,8 +115,8 @@ export default function Registration() {
               name="telefono" 
               placeholder="Ej: 3001234567" 
               value={telefono}
-              onChange={handleTelefonoChange} // Restringe a solo números automáticamente
-              maxLength={10} // Límite estándar de dígitos
+              onChange={handleTelefonoChange}
+              maxLength={10}
               required 
             />
 
@@ -134,12 +142,14 @@ export default function Registration() {
               required 
             />
 
-            <label htmlFor="clave">Contraseña: <span style={{color: 'red'}}>*</span></label>
-            <input 
+            <label htmlFor="clave">
+                Contraseña: <span style={{ color: 'red' }}>*</span>
+             </label>
+             <input 
               type="password" 
               id="clave" 
               name="clave" 
-              placeholder="Mínimo 6 caracteres" 
+              placeholder="Mínimo 6 caracteres (mayúscula, minúscula, número y símbolo)" 
               value={clave}
               onChange={(e) => setClave(e.target.value)}
               required 
