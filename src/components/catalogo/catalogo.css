@@ -116,7 +116,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   margin-top: 1.2rem;
+}
+
+.card-producto__acciones {
+  display: flex;
+  align-items: center;
 }
 
 .card-producto__btn {
@@ -130,12 +136,116 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: none;
 }
 
 .card-producto__btn:hover {
   background: var(--color-oscuro);
   transform: translateY(-2px);
+}
+
+.card-producto__contador {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffffff;
+  border: 1px solid #e8c2cf;
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+
+.card-producto__badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: white;
+  color: var(--color-primario);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.card-producto__contador-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #d8aab6;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111111;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.card-producto__contador-btn:hover {
+  background: #fff5f8;
+  height: 2.2rem;
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.card-producto__cantidad {
+  width: 2.8rem;
+  min-width: 2.8rem;
+  height: 2rem;
+  border: none;
+  background: #ffffff;
+  text-align: center;
+  font-weight: 700;
+  color: #111111;
+  outline: none;
+  appearance: textfield;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  padding: 0 0.2rem;
+}
+
+.card-producto__cantidad::-webkit-outer-spin-button,
+.card-producto__cantidad::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.catalogo__resumen {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: white;
+  border: 1px solid #f0dce3;
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 6px 18px rgba(128, 79, 93, 0.08);
+}
+
+.catalogo__resumen-info {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-oscuro);
+}
+
+.catalogo__resumen-btn {
+  background: var(--color-primario);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.catalogo__resumen-btn:hover {
+  background: var(--color-oscuro);
 }
 
 @media (max-width: 600px) {

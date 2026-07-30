@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './shopping_cart.css';
 
 function Carrito() {
-  // 1. Estado para los productos en el carrito (lista simulada)
-  const [items, setItems] = useState([
-    { id: 1, nombre: 'Producto Ejemplo A', precio: 25000, cantidad: 1 },
-    { id: 2, nombre: 'Producto Ejemplo B', precio: 15000, cantidad: 2 }
-  ]);
+  const [items, setItems] = useState(() => {
+    const guardado = localStorage.getItem('ferchys-carrito');
+    return guardado ? JSON.parse(guardado) : [];
+  });
 
   // 2. Estado para el formulario
   const [formData, setFormData] = useState({
@@ -16,28 +15,37 @@ function Carrito() {
     metodoPago: 'tarjeta'
   });
 
+  useEffect(() => {
+    localStorage.setItem('ferchys-carrito', JSON.stringify(items));
+    window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+  }, [items]);
+
   // --- FUNCIONES DEL CARRITO ---
 
   // Sumar cantidad
   const incrementar = (id) => {
-    setItems(items.map(item => 
-      item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item
-    ));
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item
+      )
+    );
   };
 
   // Restar cantidad (mínimo 1)
   const decrementar = (id) => {
-    setItems(items.map(item => {
-      if (item.id === id && item.cantidad > 1) {
-        return { ...item, cantidad: item.cantidad - 1 };
-      }
-      return item;
-    }));
+    setItems((prevItems) =>
+      prevItems.map((item) => {
+        if (item.id === id && item.cantidad > 1) {
+          return { ...item, cantidad: item.cantidad - 1 };
+        }
+        return item;
+      })
+    );
   };
 
   // Quitar producto del carrito
   const eliminarProducto = (id) => {
-    setItems(items.filter(item => item.id !== id));
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   // Calcular el precio total
