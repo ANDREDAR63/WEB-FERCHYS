@@ -19,6 +19,10 @@ export default function Registration() {
   // Base de datos simulada
   const correosExistentes = ['ferchys@postres.com', 'admin@correo.com', 'cliente@prueba.com'];
 
+  const cerrarError = () => {
+    setErrorMensaje('');
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -51,7 +55,7 @@ export default function Registration() {
       },
       {
         condicion: !regexPassword.test(clave),
-        mensaje: '⚠️ La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).',
+        mensaje: 'La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).',
       },
       {
         condicion: clave !== confirmarClave,
@@ -76,6 +80,23 @@ export default function Registration() {
 
   return (
     <section className="acceso-usuarios">
+      {errorMensaje && (
+        <div className="mensaje-error-splash" role="alert">
+          <div className="mensaje-error-splash__card">
+            <button
+              type="button"
+              className="mensaje-error-splash__close"
+              onClick={cerrarError}
+              aria-label="Cerrar mensaje de error"
+            >
+              ×
+            </button>
+            <h3>¡Ups!</h3>
+            <p>{errorMensaje}</p>
+          </div>
+        </div>
+      )}
+
       {registradoExitoso ? (
         <div className="mensaje-exito">
           <h2>¡Felicidades!</h2>
@@ -89,8 +110,6 @@ export default function Registration() {
       ) : (
         <>
           <h2>Crea tu cuenta en Ferchy's</h2>
-
-          {errorMensaje && <div className="mensaje-error">{errorMensaje}</div>}
 
           <form onSubmit={manejarRegistro}>
             <label htmlFor="nombre">
