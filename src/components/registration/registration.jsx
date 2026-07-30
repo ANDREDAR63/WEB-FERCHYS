@@ -10,30 +10,47 @@ export default function Registration() {
   const [clave, setClave] = useState('');
   const [confirmarClave, setConfirmarClave] = useState('');
 
-  // Estados para controlar los mensajes de alerta o éxito
   const [registradoExitoso, setRegistradoExitoso] = useState(false);
   const [errorMensaje, setErrorMensaje] = useState('');
 
-  // Base de datos simulada (ejemplo de correos que ya existen)
+  // Base de datos simulada
   const correosExistentes = ['ferchys@postres.com', 'admin@correo.com', 'cliente@prueba.com'];
+
+  // Validación estricta solo para números en el teléfono
+  const handleTelefonoChange = (e) => {
+    const soloNumeros = e.target.value.replace(/\D/g, ''); // Elimina cualquier carácter que no sea número
+    setTelefono(soloNumeros);
+  };
+
+  // Validación para permitir solo letras y espacios en el nombre
+  const handleNombreChange = (e) => {
+    const soloLetras = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    setNombre(soloLetras);
+  };
 
   const manejarRegistro = (e) => {
     e.preventDefault();
-    setErrorMensaje(''); // Limpiamos errores previos
+    setErrorMensaje('');
 
-    // 1. Validar si las contraseñas coinciden
+    // Validación de longitud mínima de contraseña
+    if (clave.length < 6) {
+      setErrorMensaje('⚠️ La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
+    // Validar si las contraseñas coinciden
     if (clave !== confirmarClave) {
       setErrorMensaje('⚠️ Las contraseñas no coinciden. Por favor, revísalas.');
       return;
     }
 
-    // 2. Validar si el usuario ya se encuentra registrado
+    // Validar si el usuario ya se encuentra registrado
     if (correosExistentes.includes(correo.trim().toLowerCase())) {
       setErrorMensaje('⚠️ Este correo electrónico ya se encuentra registrado. Intenta iniciar sesión.');
       return;
     }
 
-    // Si todo está correcto, procedemos con el registro exitoso
+    // Registro exitoso
     console.log('Usuario registrado con éxito:', { nombre, correo, telefono, direccion });
     setRegistradoExitoso(true);
   };
@@ -54,7 +71,6 @@ export default function Registration() {
         <>
           <h2>Crea tu cuenta en Ferchy's</h2>
 
-          {/* Caja para mostrar alertas de error si ocurren */}
           {errorMensaje && (
             <div style={{ 
               backgroundColor: '#ffe6ed', 
@@ -80,18 +96,19 @@ export default function Registration() {
               name="nombre" 
               placeholder="Tu nombre y apellido" 
               value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              onChange={handleNombreChange}
               required 
             />
 
             <label htmlFor="telefono">Número de contacto: <span style={{color: 'red'}}>*</span></label>
             <input 
-              type="tel" 
+              type="text" 
               id="telefono" 
               name="telefono" 
               placeholder="Ej: 3001234567" 
               value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
+              onChange={handleTelefonoChange} // Restringe a solo números automáticamente
+              maxLength={10} // Límite estándar de dígitos
               required 
             />
 
