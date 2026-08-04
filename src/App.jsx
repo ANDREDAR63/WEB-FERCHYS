@@ -1,11 +1,13 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom'; // <-- Asegúrate de que NO tenga BrowserRouter aquí
+import { Routes, Route } from 'react-router-dom'; 
 import Layout from './components/layout/layout';
 import Hero from './components/hero/hero';
 import Catalogo from './components/catalogo/catalogo';
 import About from './components/about/about';
 import Contacto from './components/contacto/contacto';
-import DashboardCocinero from './components/pages/DashboardCocinero';
+import Login from './components/login/login'; 
+import Registration from './components/registration/registration';
+
 function App() {
   return (
     <Layout>
@@ -14,7 +16,8 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/nosotros" element={<About />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/dashboard-cocinero" element={<DashboardCocinero />} />
+        <Route path="/login" element={<Login />} /> 
+        <Route path="/registration" element={<Registration />} />
       </Routes>
     </Layout>
   );
