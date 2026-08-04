@@ -7,6 +7,7 @@ import About from './components/about/about';
 import Contacto from './components/contacto/contacto';
 import Login from './components/login/login'; 
 import Registration from './components/registration/registration';
+import Carrito from './components/shopping_cart/shopping_cart';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/nosotros" element={<About />} />
         <Route path="/contacto" element={<Contacto />} />
+        <Route path="/carrito" element={<Carrito />} />
         <Route path="/login" element={<Login />} /> 
         <Route path="/registration" element={<Registration />} />
       </Routes>
