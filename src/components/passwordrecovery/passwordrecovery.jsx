@@ -36,37 +36,20 @@ export default function PasswordRecovery() {
   };
 
   return (
-    <div className="recuperar-pagina-container" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div className="recuperar-pagina-container" >
       
-      {/* ⚠️ FORZAMOS EL ANCHO AQUÍ EN LÍNEA PARA ANULAR EL ALTO/ANCHO QUE LE IMPONE EL LAYOUT PADRE */}
       <div 
-        className="recuperar-card" 
-        style={{ 
-          width: '90vw', 
-          maxWidth: '850px', 
-          minHeight: '480px', 
-          display: 'flex', 
-          flexDirection: 'row',
-          borderRadius: '24px',
-          overflow: 'hidden',
-          backgroundColor: '#ffffff',
-          boxShadow: '0 15px 35px rgba(128, 79, 93, 0.15)'
-        }}
-      >
+        className="recuperar-card">
         
         {/* COLUMNA IZQUIERDA: CARRUSEL */}
-        <div className="recuperar-carrusel" style={{ flex: '1', width: '50%', position: 'relative', height: '100%', minHeight: '480px' }}>
-          {imagenes.map((img, index) => (
+        <div className="recuperar-carrusel">
+          {imagenes.map ((img, index) => (
             <div
               key={index}
               className={`carrusel-slide ${index === imagenActual ? 'active' : ''}`}
               style={{ backgroundImage: `url(${img})` }}
             />
           ))}
-          <div className="carrusel-overlay">
-            <h3>Ferchy's Postres</h3>
-            <p>Endulzando tus mejores momentos</p>
-          </div>
           <div className="carrusel-dots">
             {imagenes.map((_, index) => (
               <span
@@ -79,7 +62,7 @@ export default function PasswordRecovery() {
         </div>
 
         {/* COLUMNA DERECHA: FORMULARIO */}
-        <div className="recuperar-contenido" style={{ flex: '1', width: '50%', padding: '2.5rem 2rem' }}>
+        <div className="recuperar-contenido">
           {correoEnviado ? (
             <div className="mensaje-exito">
               <h2>¡Revisa tu bandeja! 📩</h2>
