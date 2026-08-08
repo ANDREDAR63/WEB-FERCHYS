@@ -7,7 +7,7 @@ import About from './components/about/about';
 import Contacto from './components/contacto/contacto';
 import Login from './components/login/login'; 
 import Registration from './components/registration/registration';
-import PasswordRecovery from './components/PasswordRecovery/PasswordRecovery'; 
+import PasswordRecovery from './components/passwordrecovery/passwordrecovery'; 
 import ShoppingCart from './components/shopping_cart/shopping_cart';
 
 function App() {
