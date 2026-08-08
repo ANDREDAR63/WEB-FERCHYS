@@ -4,14 +4,21 @@ on:
   push:
     branches: ["main"]
 
+# Permisos requeridos a nivel global para GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Cancela ejecuciones anteriores si haces varios pushes seguidos
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
+  # 1. Job para instalar y compilar el proyecto
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
     steps:
       - uses: actions/checkout@v4
 
@@ -36,5 +43,14 @@ jobs:
         with:
           path: './frontend/dist'
 
-      - name: Deploy
+  # 2. Job para publicar el artefacto en GitHub Pages
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v5
