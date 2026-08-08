@@ -1,0 +1,1 @@
+export default function ShoppingCart() { return <div>Carrito de Compras</div>; }

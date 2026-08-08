@@ -1,1 +1,83 @@
-/* Estilos para Login */
+/* ==========================================================================
+   Ferchys Postres - Estilos del Módulo de Acceso (login.css)
+   ========================================================================== */
+
+/* Contenedor principal: Centra todo en la pantalla */
+.acceso-usuarios {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Ocupa el 100% del alto de la ventana */
+  background-color: var(--color-secundario); /* Usamos tu rosa tierno para el fondo */
+  padding: 2rem;
+}
+
+/* Espaciado y color del título principal de esta sección */
+.acceso-usuarios h2 {
+  color: var(--color-oscuro); /* Tu tono chocolate */
+  margin-bottom: 1.5rem;
+}
+
+/* La Tarjeta del formulario */
+.acceso-usuarios form {
+  background-color: var(--color-claro); /* Fondo blanco */
+  padding: 2.5rem 2rem;
+  border-radius: var(--borde-redondeado-lg); /* Bordes suaves */
+  box-shadow: var(--sombra-media); /* Sombra elegante */
+  width: 100%;
+  max-width: 420px; /* Evita que el formulario se estire en pantallas grandes */
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* Separación automática entre inputs y labels */
+}
+
+/* Estilo de los textos sobre los inputs (Labels) */
+.acceso-usuarios label {
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  color: var(--color-oscuro);
+  font-size: 0.95rem;
+  margin-bottom: -0.5rem; /* Acerca el texto un poco más a su campo */
+}
+
+/* Botón de Iniciar Sesión */
+.acceso-usuarios button {
+  background-color: var(--color-primario);
+  color: var(--color-claro);
+  padding: 0.9rem;
+  margin-top: 1rem;
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--borde-redondeado-lg);
+  border: none;
+  cursor: pointer;
+  transition: var(--transicion-rapida);
+  box-shadow: 0 4px 10px rgba(238, 116, 165, 0.3); /* Sombra adaptada a tu color rosa */
+}
+
+/* Efecto al pasar el cursor sobre el botón */
+.acceso-usuarios button:hover {
+  background-color: #d65a8d; /* Un rosa ligeramente más oscuro para el contraste */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(238, 116, 165, 0.4);
+}
+
+/* Textos informativos debajo del formulario */
+.acceso-usuarios p {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Estilo para el enlace de "Regístrate aquí" */
+.acceso-usuarios p a {
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+.acceso-usuarios p a:hover {
+  color: var(--color-oscuro);
+  text-decoration: underline;
+}
