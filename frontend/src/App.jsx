@@ -5,10 +5,7 @@ import Hero from './components/hero/hero';
 import Catalogo from './components/catalogo/catalogo';
 import About from './components/about/about';
 import Contacto from './components/contacto/contacto';
-import Login from './components/login/login'; 
-import Registration from './components/registration/registration';
-import PasswordRecovery from './components/PasswordRecovery/PasswordRecovery'; // <-- Importa el componente de recuperación de contraseña
-
+import DashboardCocinero from './components/pages/DashboardCocinero';
 function App() {
   return (
     <Layout>
@@ -17,10 +14,7 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/nosotros" element={<About />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/login" element={<Login />} /> 
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/PasswordRecovery" element={<PasswordRecovery />} />
-        <Route path="/recuperar-contraseña" element={<PasswordRecovery />} /> {/* Ruta para la recuperación de contraseña */}
+       <Route path="/dashboard-cocinero" element={<DashboardCocinero />} />
       </Routes>
     </Layout>
   );
