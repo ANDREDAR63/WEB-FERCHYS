@@ -20,6 +20,8 @@ function App() {
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/login" element={<Login />} /> 
         <Route path="/registration" element={<Registration />} />
+        <Route path="/PasswordRecovery" element={<PasswordRecovery />} />
+        <Route path="/recuperar-contraseña" element={<PasswordRecovery />} /> {/* Ruta para la recuperación de contraseña */}
       </Routes>
     </Layout>
   );
