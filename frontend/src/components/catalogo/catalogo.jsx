@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './catalogo.css';
+
 const imagenes = import.meta.glob('../../assets/*', { eager: true });
 const obtenerImagen = (nombreArchivo) => {
   const ruta = Object.keys(imagenes).find(key => key.includes(nombreArchivo));
@@ -83,10 +85,56 @@ const categorias = [
 
 const Catalogo = () => {
   const [activo, setActivo] = useState('todos');
+  const [carritoActual, setCarritoActual] = useState(() => {
+    const guardado = localStorage.getItem('ferchys-carrito');
+    return guardado ? JSON.parse(guardado) : [];
+  });
+  const navigate = useNavigate();
 
   const filtrados = activo === 'todos'
     ? productos
-    : productos.filter(p => p.categoria === activo);
+    : productos.filter((p) => p.categoria === activo);
+
+  const actualizarCarrito = (producto, cantidad) => {
+    setCarritoActual((prevCarrito) => {
+      const carritoGuardado = [...prevCarrito];
+      const precioNumero = Number(String(producto.precio).replace(/[^\d]/g, ''));
+      const productoExistente = carritoGuardado.find((item) => item.id === producto.id);
+
+      if (productoExistente) {
+        productoExistente.cantidad = cantidad;
+      } else {
+        carritoGuardado.push({
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: precioNumero,
+          cantidad,
+        });
+      }
+
+      const carritoFinal = carritoGuardado.filter((item) => item.cantidad > 0);
+      localStorage.setItem('ferchys-carrito', JSON.stringify(carritoFinal));
+      window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+      return carritoFinal;
+    });
+  };
+
+  const agregarAlCarrito = (producto) => {
+    const productoExistente = carritoActual.find((item) => item.id === producto.id);
+    const nuevaCantidad = productoExistente ? productoExistente.cantidad + 1 : 1;
+    actualizarCarrito(producto, nuevaCantidad);
+  };
+
+  const cambiarCantidad = (producto, delta) => {
+    const productoExistente = carritoActual.find((item) => item.id === producto.id);
+    const nuevaCantidad = productoExistente ? productoExistente.cantidad + delta : 1;
+    actualizarCarrito(producto, Math.max(0, nuevaCantidad));
+  };
+
+  const inputCantidad = (producto, valor) => {
+    const cantidad = Number(valor);
+    actualizarCarrito(producto, Number.isNaN(cantidad) ? 0 : Math.max(0, cantidad));
+  };
 
   return (
     <section className="catalogo section-padding" id="catalogo">
@@ -112,32 +160,76 @@ const Catalogo = () => {
 
         {/* Grid de productos */}
         <div className="catalogo__grid">
-          {filtrados.map(producto => (
-            <article key={producto.id} className="card-producto">
-              {producto.badge && (
-                <span className="card-producto__badge">{producto.badge}</span>
-              )}
-              <div className="card-producto__imagen">
-                <img src={producto.img} alt={producto.nombre} className="card-producto__imagen"/>
-              </div>
-              <div className="card-cuerpo">
-                <h3 className="card-producto__nombre">{producto.nombre}</h3>
-                <p className="card-producto__desc">{producto.descripcion}</p>
-                <div className="card-producto__footer">
-                  <span className="card-precio">{producto.precio}</span>
-                  <a
-                    className="card-producto__btn"
-                    href={`https://wa.me/573024798502?text=Hola Ferchy's! Me interesa pedir: ${producto.nombre}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Pedir
-                  </a>
+          {filtrados.map(producto => {
+            const itemCarrito = carritoActual.find((item) => item.id === producto.id);
+            const cantidadActual = itemCarrito?.cantidad || 0;
+
+            return (
+              <article key={producto.id} className="card-producto">
+                {producto.badge && (
+                  <span className="card-producto__badge">{producto.badge}</span>
+                )}
+                <div className="card-producto__imagen">
+                  <img src={producto.img} alt={producto.nombre} className="card-producto__imagen"/>
                 </div>
-              </div>
-            </article>
-          ))}
+                <div className="card-cuerpo">
+                  <h3 className="card-producto__nombre">{producto.nombre}</h3>
+                  <p className="card-producto__desc">{producto.descripcion}</p>
+                  <div className="card-producto__footer">
+                    <span className="card-precio">{producto.precio}</span>
+                    <div className="card-producto__acciones">
+                      {cantidadActual > 0 ? (
+                        <div className="card-producto__contador">
+                          <button
+                            type="button"
+                            className="card-producto__contador-btn"
+                            onClick={() => cambiarCantidad(producto, -1)}
+                          >
+                            −
+                          </button>
+                          <input
+                            type="number"
+                            min="0"
+                            value={cantidadActual}
+                            onChange={(e) => inputCantidad(producto, e.target.value)}
+                            className="card-producto__cantidad"
+                          />
+                          <button
+                            type="button"
+                            className="card-producto__contador-btn"
+                            onClick={() => cambiarCantidad(producto, 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="card-producto__btn"
+                          onClick={() => agregarAlCarrito(producto)}
+                        >
+                          <span>Agregar al carrito</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
+
+        {carritoActual.length > 0 && (
+          <div className="catalogo__resumen">
+            <div className="catalogo__resumen-info">
+              <strong>{carritoActual.reduce((total, item) => total + item.cantidad, 0)} productos</strong>
+              <span>en tu selección</span>
+            </div>
+            <button type="button" className="catalogo__resumen-btn" onClick={() => navigate('/carrito')}>
+              Ir al carrito
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
