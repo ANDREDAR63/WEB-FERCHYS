@@ -11,6 +11,7 @@ const [perfil, setPerfil] = useState({
   telefono: "3001234567",
   cargo: "Cocinero Principal",
   horario: "8:00 AM - 5:00 PM",
+  foto:""
 });
 
 useEffect(() => {
@@ -177,6 +178,31 @@ const guardarCambios = () => {
   alert("Cambios guardados correctamente.");
 
 };
+
+// ==========================
+// CAMBIAR FOTO DE PERFIL
+// ==========================
+
+const cambiarFoto = (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+    const lector = new FileReader();
+    lector.onloadend = () => {
+      setPerfil((prev) => {
+
+      const perfilActualizado = {
+        ...prev,
+        foto: lector.result
+      };
+
+      localStorage.setItem("perfilCocinero", JSON.stringify(perfilActualizado));
+
+      return perfilActualizado;
+
+      });
+    };
+    lector.readAsDataURL(archivo);
+  };
 
 /* ==========================
    INVENTARIO
@@ -582,87 +608,121 @@ return (
 
         )}
 
-        {/* ==================== PERFIL ==================== */}
 
-        {seccionActiva === "perfil" && (
+{/* ==================== PERFIL ==================== */}
 
-          <section className="panel">
+{seccionActiva === "perfil" && (
 
-            <h2>Perfil del Cocinero</h2>
+<section className="panel">
 
-            <div className="perfil-card">
+    <h2>Perfil del Cocinero</h2>
 
-              <h3>{perfil.nombre}</h3>
+    <div className="perfil-card">
 
-              <p>
-                <strong>Cargo:</strong> {perfil.cargo}
-              </p>
+        <div className="foto-perfil">
 
-              <p>
-                <strong>Email:</strong> {perfil.email}
-              </p>
+            {perfil.foto ? (
 
-              <p>
-                <strong>Teléfono:</strong> {perfil.telefono}
-              </p>
+                <img
+                    src={perfil.foto}
+                    alt="Foto"
+                    className="imagen-perfil"
+                />
 
-              <p>
-                <strong>Horario:</strong> {perfil.horario}
-              </p>
+            ) : (
 
-            </div>
+                <div className="avatar">👨‍🍳</div>
 
-          </section>
+            )}
 
-        )}
+            <label htmlFor="fotoPerfil" className="btn-cambiar-foto">
+                📷 Cambiar foto
+            </label>
 
-        {/* ==================== PEDIDOS ==================== */}
+            <input
+                id="fotoPerfil"
+                type="file"
+                accept="image/*"
+                onChange={cambiarFoto}
+                hidden
+            />
 
-      
+        </div>
 
-        {seccionActiva === "pedidos" && (
+        <div className="perfil-info">
 
-          <section className="panel">
+            <h3>{perfil.nombre}</h3>
 
-            <h2>Gestión de Pedidos</h2>
+            <p><strong>Cargo:</strong> {perfil.cargo}</p>
 
-            {pedidos.map((pedido) => (
+            <p><strong>Email:</strong> {perfil.email}</p>
 
-              <div className="pedido-card" key={pedido.id}>
+            <p><strong>Teléfono:</strong> {perfil.telefono}</p>
 
-                <h3>Pedido #{pedido.id}</h3>
+            <p><strong>Horario:</strong> {perfil.horario}</p>
 
-                <p>
-                  <strong>Cliente:</strong> {pedido.cliente}
-                </p>
+            <button
+                className="btn-guardar"
+                onClick={() => setSeccionActiva("configuracion")}
+            >
+                ✏️ Editar perfil
+            </button>
 
-                <p>
-                  <strong>Hora:</strong> {pedido.hora}
-                </p>
+        </div>
 
-                <p>
-                  <strong>Estado:</strong> {pedido.estado}
-                </p>
+    </div>
 
-                <ul>
+</section>
 
-                  {pedido.productos.map((producto, index) => (
+)}
 
-                    <li key={index}>
-                      {producto}
-                    </li>
+{/* ==================== PEDIDOS ==================== */}
 
-                  ))}
+{seccionActiva === "pedidos" && (
 
-                </ul>
+  <section className="panel">
 
-              </div>
+    <h2>Gestión de Pedidos</h2>
 
-            ))}
+    {pedidos.map((pedido) => (
 
-          </section>
+      <div className="pedido-card" key={pedido.id}>
 
-        )}
+        <h3>Pedido #{pedido.id}</h3>
+
+        <p><strong>Cliente:</strong> {pedido.cliente}</p>
+
+        <p><strong>Hora:</strong> {pedido.hora}</p>
+
+        <p><strong>Estado:</strong> {pedido.estado}</p>
+
+        <ul>
+          {pedido.productos.map((producto, index) => (
+            <li key={index}>{producto}</li>
+          ))}
+        </ul>
+
+        <button
+          className="btn btn-preparar"
+          onClick={() => prepararPedido(pedido.id)}
+        >
+          Preparar
+        </button>
+
+        <button
+          className="btn btn-listo"
+          onClick={() => marcarListo(pedido.id)}
+        >
+          Marcar listo
+        </button>
+
+      </div>
+
+    ))}
+
+  </section>
+
+)}
 
        {/* ==================== INVENTARIO ==================== */}
 
