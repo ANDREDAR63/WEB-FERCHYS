@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,11 @@ Route::apiResource('products', ProductController::class)->only(['index', 'show']
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/items', [CartController::class, 'addItem']);
+    Route::put('/cart/items/{cartItem}', [CartController::class, 'updateItem']);
+    Route::delete('/cart/items/{cartItem}', [CartController::class, 'removeItem']);
 
     // Solo estas acciones administrativas requieren login
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
