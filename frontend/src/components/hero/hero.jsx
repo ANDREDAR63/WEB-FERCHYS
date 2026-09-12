@@ -9,7 +9,31 @@ const obtenerImagen = (nombreArchivo) => {
   return ruta ? imagenes[ruta].default : '';
 };
 
+import { useEffect, useState } from 'react';
+
 const Hero = () => {
+	const [mensajeBackend, setMensajeBackend] = useState('');
+
+	useEffect(() => {
+	  const API_URL = import.meta.env.VITE_API_URL;
+
+	  fetch(`${API_URL}/ping`, {
+	    method: 'GET',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json',
+	      'ngrok-skip-browser-warning': '69420'
+	    }
+	  })
+	  .then(res => res.json())
+	  .then(data => {
+	    console.log("Respuesta de Laravel:", data);
+	    setMensajeBackend(data.mensaje);
+	  })
+	  .catch(err => console.error("Fallo la conexión:", err));
+	}, []);
+
+
   return (
     <section className="hero" id="inicio">
       {/* Decorative blobs */}
@@ -19,7 +43,7 @@ const Hero = () => {
 
       <div className="hero__container">
         <div className="hero__content">
-          <span className="hero__badge">"Sabores que nacen del corazón"</span>
+		<span className="hero__badge">"Sabores que nacen del corazón"</span>
           <h1 className="hero__title">
             El sabor que
             <br />
