@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
 import './navbar.css';
 import logo from '../../assets/logo.ico';
 
@@ -18,8 +19,11 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
 
     const syncCart = () => {
-      const guardado = localStorage.getItem('ferchys-carrito');
-      setCartItems(guardado ? JSON.parse(guardado) : []);
+      if (!localStorage.getItem('ferchys-token')) {
+        setCartItems([]);
+        return;
+      }
+      apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
     };
 
     syncCart();

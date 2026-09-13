@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PromotionController;
+use App\Http\Controllers\Api\UserController;
+use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Route;
 
 // Rutas públicas (no requieren estar logueado)
@@ -18,6 +20,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);
 Route::apiResource('promotions', PromotionController::class)->only(['index', 'show']);
+Route::get('/payment-methods', fn () => PaymentMethod::where('active', true)->get());
 
 // Rutas protegidas (requieren un token válido de Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
@@ -32,7 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{order}', [OrderController::class, 'show']);
     Route::post('/orders', [OrderController::class, 'store']);
-    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])
+        ->middleware('role:admin,cook,courier');
 
     Route::post('/orders/{order}/payments', [PaymentController::class, 'store']);
     Route::get('/orders/{order}/payments', [PaymentController::class, 'show']);
@@ -44,6 +48,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('promotions', PromotionController::class)->except(['index', 'show']);
 
     // Solo estas acciones administrativas requieren login
-    Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
-    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+    Route::apiResource('categories', CategoryController::class)->except(['index', 'show'])
+        ->middleware('role:admin');
+    Route::apiResource('products', ProductController::class)->except(['index', 'show'])
+        ->middleware('role:admin');
+    Route::get('/users', [UserController::class, 'index'])->middleware('role:admin');
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './contacto.css';
 import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
