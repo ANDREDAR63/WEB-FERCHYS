@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
+import { useAuth } from '../../context/auth';
 import './catalogo.css';
 
 const imagenes = import.meta.glob('../../assets/*', { eager: true });
@@ -8,7 +10,7 @@ const obtenerImagen = (nombreArchivo) => {
   return ruta ? imagenes[ruta].default : '';
 };
 
-const productos = [
+const productosIniciales = [
     {
     id: 1, categoria: 'horneados',
     img:obtenerImagen('favicon-rosa'), nombre: 'Suspiros',
@@ -85,48 +87,76 @@ const categorias = [
 
 const Catalogo = () => {
   const [activo, setActivo] = useState('todos');
-  const [carritoActual, setCarritoActual] = useState(() => {
-    const guardado = localStorage.getItem('ferchys-carrito');
-    return guardado ? JSON.parse(guardado) : [];
-  });
+  const [productos, setProductos] = useState([]);
+  const [carritoActual, setCarritoActual] = useState([]);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    apiRequest('/products')
+      .then((data) => setProductos(data.map((product) => ({
+        ...product,
+        categoria: product.category?.name?.toLowerCase() || 'otros',
+        nombre: product.name,
+        descripcion: product.description || '',
+        precio: Number(product.price),
+        img: product.image_url || obtenerImagen('favicon-rosa'),
+        badge: '',
+      }))))
+      .catch((requestError) => {
+        setError(requestError.message);
+        setProductos(productosIniciales);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem('ferchys-token')) return;
+    apiRequest('/cart')
+      .then((cart) => {
+        setCarritoActual(cart.items || []);
+        window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+      })
+      .catch(() => setCarritoActual([]));
+  }, []);
 
   const filtrados = activo === 'todos'
     ? productos
     : productos.filter((p) => p.categoria === activo);
 
   const actualizarCarrito = (producto, cantidad) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     setCarritoActual((prevCarrito) => {
-      const carritoGuardado = [...prevCarrito];
-      const precioNumero = Number(String(producto.precio).replace(/[^\d]/g, ''));
-      const productoExistente = carritoGuardado.find((item) => item.id === producto.id);
-
-      if (productoExistente) {
-        productoExistente.cantidad = cantidad;
-      } else {
-        carritoGuardado.push({
-          id: producto.id,
-          nombre: producto.nombre,
-          precio: precioNumero,
-          cantidad,
-        });
+      const productoExistente = prevCarrito.find((item) => item.product_id === producto.id);
+      if (cantidad === 0 && productoExistente) {
+        apiRequest(`/cart/items/${productoExistente.id}`, { method: 'DELETE' })
+          .then(() => apiRequest('/cart'))
+          .then((cart) => setCarritoActual(cart.items || []))
+          .catch((error) => setError(error.message));
+        return prevCarrito;
       }
-
-      const carritoFinal = carritoGuardado.filter((item) => item.cantidad > 0);
-      localStorage.setItem('ferchys-carrito', JSON.stringify(carritoFinal));
-      window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
-      return carritoFinal;
+      const request = productoExistente
+        ? apiRequest(`/cart/items/${productoExistente.id}`, { method: 'PUT', body: JSON.stringify({ quantity: cantidad }) })
+        : apiRequest('/cart/items', { method: 'POST', body: JSON.stringify({ product_id: producto.id, quantity: cantidad }) });
+      request.then(() => apiRequest('/cart')).then((cart) => {
+        setCarritoActual(cart.items || []);
+        window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+      }).catch((error) => setError(error.message));
+      return prevCarrito;
     });
   };
 
   const agregarAlCarrito = (producto) => {
-    const productoExistente = carritoActual.find((item) => item.id === producto.id);
+    const productoExistente = carritoActual.find((item) => item.product_id === producto.id);
     const nuevaCantidad = productoExistente ? productoExistente.cantidad + 1 : 1;
     actualizarCarrito(producto, nuevaCantidad);
   };
 
   const cambiarCantidad = (producto, delta) => {
-    const productoExistente = carritoActual.find((item) => item.id === producto.id);
+    const productoExistente = carritoActual.find((item) => item.product_id === producto.id);
     const nuevaCantidad = productoExistente ? productoExistente.cantidad + delta : 1;
     actualizarCarrito(producto, Math.max(0, nuevaCantidad));
   };
@@ -161,7 +191,7 @@ const Catalogo = () => {
         {/* Grid de productos */}
         <div className="catalogo__grid">
           {filtrados.map(producto => {
-            const itemCarrito = carritoActual.find((item) => item.id === producto.id);
+            const itemCarrito = carritoActual.find((item) => item.product_id === producto.id);
             const cantidadActual = itemCarrito?.cantidad || 0;
 
             return (
@@ -219,6 +249,7 @@ const Catalogo = () => {
           })}
         </div>
 
+        {error && <p role="alert">{error}</p>}
         {carritoActual.length > 0 && (
           <div className="catalogo__resumen">
             <div className="catalogo__resumen-info">

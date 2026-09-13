@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './login.css';
+import { useAuth } from '../../context/auth';
 
 export default function Login() {
   const [correo, setCorreo] = useState('');
   const [clave, setClave] = useState('');
   const [errorMensaje, setErrorMensaje] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const manejarEnvio = (e) => {
     e.preventDefault();
@@ -17,12 +19,14 @@ export default function Login() {
 
     // Validación de seguridad de la contraseña al iniciar sesión
     if (!regexPassword.test(clave)) {
-      setErrorMensaje('⚠️ La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).');
+      setErrorMensaje('La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).');
       return;
     }
 
-    console.log('Iniciando sesión con:', { correo, clave });
-    navigate('/');
+    login(correo, clave).then((user) => {
+      const dashboard = { admin: '/dashboard/admin', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
+      navigate(dashboard || '/');
+    }).catch((error) => setErrorMensaje(error.message));
   };
 
   return (

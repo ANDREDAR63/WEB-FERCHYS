@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './hero.css';
 
@@ -9,31 +8,7 @@ const obtenerImagen = (nombreArchivo) => {
   return ruta ? imagenes[ruta].default : '';
 };
 
-import { useEffect, useState } from 'react';
-
 const Hero = () => {
-	const [mensajeBackend, setMensajeBackend] = useState('');
-
-	useEffect(() => {
-	  const API_URL = import.meta.env.VITE_API_URL;
-
-	  fetch(`${API_URL}/ping`, {
-	    method: 'GET',
-	    headers: {
-	      'Accept': 'application/json',
-	      'Content-Type': 'application/json',
-	      'ngrok-skip-browser-warning': '69420'
-	    }
-	  })
-	  .then(res => res.json())
-	  .then(data => {
-	    console.log("Respuesta de Laravel:", data);
-	    setMensajeBackend(data.mensaje);
-	  })
-	  .catch(err => console.error("Fallo la conexión:", err));
-	}, []);
-
-
   return (
     <section className="hero" id="inicio">
       {/* Decorative blobs */}

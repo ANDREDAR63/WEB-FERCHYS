@@ -1,269 +1,126 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
+import { useAuth } from '../../context/auth';
 import './shopping_cart.css';
 
-// 1. Lista fija de 10 productos disponibles para agregar
-const PRODUCTOS_DISPONIBLES = [
-  { id: 'p1', nombre: 'Suspiros', precio: 3000 },
-  { id: 'p2', nombre: 'Profiteroles', precio: 5000 },
-  { id: 'p3', nombre: 'Alfajores', precio: 7000 },
-  { id: 'p4', nombre: 'Cheesecake de limón', precio: 7000 },
-  { id: 'p5', nombre: 'Cheesecake de chocolate', precio: 7000 },
-  { id: 'p6', nombre: 'Cheesecake de Árandano', precio: 7000 },
-  { id: 'p7', nombre: 'Cheesecake de papayuela', precio: 7000 },
-  { id: 'p8', nombre: 'Cheesecake de red velvet', precio: 7000 },
-  { id: 'p9', nombre: 'Torta de arándanos', precio: 3000 },
-  { id: 'p10', nombre: 'Torta de chocolate', precio: 5000 }
-];
-
 function Carrito() {
-  const [items, setItems] = useState(() => {
-    const guardado = localStorage.getItem('ferchys-carrito');
-    return guardado ? JSON.parse(guardado) : [];
-  });
-
-  // Estado para el producto seleccionado en el desplegable
-  const [productoSeleccionadoId, setProductoSeleccionadoId] = useState(PRODUCTOS_DISPONIBLES[0].id);
-
-  // Estado para el formulario de Envío/Pago
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    direccion: '',
-    metodoPago: 'tarjeta'
-  });
+  const [items, setItems] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [productId, setProductId] = useState('');
+  const [address, setAddress] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [paymentMethodId, setPaymentMethodId] = useState('');
+  const [error, setError] = useState('');
+  const [sending, setSending] = useState(false);
+  const [orderCreated, setOrderCreated] = useState(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem('ferchys-carrito', JSON.stringify(items));
-    window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
-  }, [items]);
-
-  useEffect(() => {
-    localStorage.setItem('ferchys-carrito', JSON.stringify(items));
-    window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
-  }, [items]);
-
-  // --- LÓGICA PARA AGREGAR PRODUCTO DESDE LA LISTA ---
-  const agregarProductoSeleccionado = (e) => {
-    e.preventDefault();
-
-    const productoBase = PRODUCTOS_DISPONIBLES.find(p => p.id === productoSeleccionadoId);
-    if (!productoBase) return;
-
-    const existe = items.find(item => item.id === productoBase.id);
-
-    if (existe) {
-      setItems(items.map(item =>
-        item.id === productoBase.id ? { ...item, cantidad: item.cantidad + 1 } : item
-      ));
-    } else {
-      setItems([...items, { ...productoBase, cantidad: 1 }]);
-    }
-  };
-
-  // --- CONTROLES DE CANTIDAD Y ELIMINACIÓN ---
-  const incrementar = (id) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item
-      )
-    );
-  };
-
-  const decrementar = (id) => {
-    setItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.id === id && item.cantidad > 1) {
-          return { ...item, cantidad: item.cantidad - 1 };
-        }
-        return item;
+    if (!user) return;
+    Promise.all([apiRequest('/cart'), apiRequest('/products'), apiRequest('/payment-methods')])
+      .then(([cart, productData, paymentMethodData]) => {
+        setItems(cart.items || []);
+        setProducts(productData);
+        setProductId(String(productData[0]?.id || ''));
+        setPaymentMethods(paymentMethodData);
+        setPaymentMethodId(String(paymentMethodData[0]?.id || ''));
       })
-    );
+      .catch((requestError) => setError(requestError.message));
+  }, [user]);
+
+  const refreshCart = () => apiRequest('/cart').then((cart) => {
+    setItems(cart.items || []);
+    window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+  });
+
+  const agregarProducto = (event) => {
+    event.preventDefault();
+    if (!productId) return;
+    apiRequest('/cart/items', {
+      method: 'POST',
+      body: JSON.stringify({ product_id: Number(productId), quantity: 1 }),
+    }).then(refreshCart).catch((requestError) => setError(requestError.message));
   };
 
-  const eliminarProducto = (id) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const cambiarCantidad = (item, quantity) => {
+    const request = quantity > 0
+      ? apiRequest(`/cart/items/${item.id}`, { method: 'PUT', body: JSON.stringify({ quantity }) })
+      : apiRequest(`/cart/items/${item.id}`, { method: 'DELETE' });
+    request.then(refreshCart).catch((requestError) => setError(requestError.message));
   };
 
-  // Calcular precio total
-  const totalPagar = items.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+  const totalPagar = items.reduce((total, item) => total + Number(item.product?.price || 0) * item.quantity, 0);
 
-  // --- MANEJO DEL FORMULARIO DE ENVÍO ---
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Si es el campo nombre, se filtran números y caracteres especiales en tiempo real
-    if (name === 'nombre') {
-      const soloLetras = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
-      setFormData({
-        ...formData,
-        [name]: soloLetras
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value
-      });
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setError('');
+    setSending(true);
+    apiRequest('/addresses', {
+      method: 'POST',
+      body: JSON.stringify({ full_address: address.trim(), is_default: true }),
+    })
+      .then((createdAddress) => apiRequest('/orders', {
+        method: 'POST',
+        body: JSON.stringify({ address_id: createdAddress.id }),
+      }))
+      .then((order) => apiRequest(`/orders/${order.id}/payments`, {
+        method: 'POST',
+        body: JSON.stringify({ payment_method_id: Number(paymentMethodId) }),
+      }).then(() => order))
+      .then((order) => {
+        setOrderCreated(order);
+        setItems([]);
+        setAddress('');
+        window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
+      })
+      .catch((requestError) => setError(requestError.message))
+      .finally(() => setSending(false));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (items.length === 0) {
-      alert('El carrito está vacío. Agrega productos antes de confirmar.');
-      return;
-    }
-
-    const numeroTelefono = "573001234567"; // Reemplazar por tu WhatsApp
-    
-    const listaProductos = items
-      .map(i => `- ${i.nombre} (x${i.cantidad}): $${(i.precio * i.cantidad).toLocaleString()}`)
-      .join('%0A');
-
-    const mensaje = `*¡Nuevo Pedido!*%0A%0A` +
-                    `*Productos:*%0A${listaProductos}%0A%0A` +
-                    `*Total a Pagar:* $${totalPagar.toLocaleString()}%0A%0A` +
-                    `*Cliente:* ${formData.nombre}%0A` +
-                    `*Correo:* ${formData.email}%0A` +
-                    `*Dirección:* ${formData.direccion}%0A` +
-                    `*Pago:* ${formData.metodoPago}`;
-
-    window.open(`https://wa.me/${numeroTelefono}?text=${mensaje}`, '_blank');
-  };
+  if (!user) {
+    return <div className="cart-container"><h2>Carrito de Compras</h2><p>Inicia sesión para consultar y guardar tu carrito.</p><button type="button" onClick={() => navigate('/login')}>Iniciar sesión</button></div>;
+  }
 
   return (
     <div className="cart-container">
-      <h2>🛒 Carrito de Compras</h2>
+      <h2>Carrito de Compras</h2>
+      {error && <p role="alert">{error}</p>}
+      {orderCreated && <p role="status">Pedido #{orderCreated.id} creado correctamente.</p>}
 
-      {/* DESPLEGABLE CON LOS 10 PRODUCTOS CON PRECIO FIJO */}
       <div className="add-product-box">
-        <h3>➕ Selecciona un producto para agregar:</h3>
-        <form onSubmit={agregarProductoSeleccionado} className="add-product-form">
-          <select 
-            value={productoSeleccionadoId} 
-            onChange={(e) => setProductoSeleccionadoId(e.target.value)}
-            className="product-select"
-          >
-            {PRODUCTOS_DISPONIBLES.map(prod => (
-              <option key={prod.id} value={prod.id}>
-                {prod.nombre} - ${prod.precio.toLocaleString()}
-              </option>
-            ))}
+        <h3>Selecciona un producto para agregar:</h3>
+        <form onSubmit={agregarProducto} className="add-product-form">
+          <select value={productId} onChange={(event) => setProductId(event.target.value)} className="product-select">
+            {products.map((product) => <option key={product.id} value={product.id}>{product.name} - ${Number(product.price).toLocaleString()}</option>)}
           </select>
           <button type="submit" className="add-btn">Agregar al Carrito</button>
         </form>
       </div>
 
       <hr />
-
-      {/* LISTA DE PRODUCTOS EN EL CARRITO */}
       <div className="cart-items">
         <h3>Productos en el Carrito:</h3>
-        {items.length === 0 ? (
-          <p className="empty-msg">Tu carrito está vacío.</p>
-        ) : (
-          items.map(item => (
-            <div key={item.id} className="cart-item">
-              <div className="item-info">
-                <h4>{item.nombre}</h4>
-                <p>Precio c/u: ${item.precio.toLocaleString()}</p>
-              </div>
-
-              <div className="item-controls">
-                <button type="button" onClick={() => decrementar(item.id)}>-</button>
-                <span>{item.cantidad}</span>
-                <button type="button" onClick={() => incrementar(item.id)}>+</button>
-              </div>
-
-              <div className="item-subtotal">
-                <strong>${(item.precio * item.cantidad).toLocaleString()}</strong>
-              </div>
-
-              <button 
-                type="button" 
-                className="delete-btn" 
-                onClick={() => eliminarProducto(item.id)}
-              >
-                🗑️
-              </button>
-            </div>
-          ))
-        )}
-
-        <div className="cart-total">
-          <h3>Total: ${totalPagar.toLocaleString()}</h3>
-        </div>
+        {items.length === 0 ? <p className="empty-msg">Tu carrito está vacío.</p> : items.map((item) => (
+          <div key={item.id} className="cart-item">
+            <div className="item-info"><h4>{item.product?.name}</h4><p>Precio c/u: ${Number(item.product?.price || 0).toLocaleString()}</p></div>
+            <div className="item-controls"><button type="button" onClick={() => cambiarCantidad(item, item.quantity - 1)}>-</button><span>{item.quantity}</span><button type="button" onClick={() => cambiarCantidad(item, item.quantity + 1)}>+</button></div>
+            <div className="item-subtotal"><strong>${(Number(item.product?.price || 0) * item.quantity).toLocaleString()}</strong></div>
+            <button type="button" className="delete-btn" onClick={() => cambiarCantidad(item, 0)}>Eliminar</button>
+          </div>
+        ))}
+        <div className="cart-total"><h3>Total: ${totalPagar.toLocaleString()}</h3></div>
       </div>
 
       <hr />
-
-      {/* FORMULARIO DE ENVÍO */}
       <form onSubmit={handleSubmit} className="cart-form">
-        <h3>Datos de Envío</h3>
-
-        {/* NOMBRE (Sólo Letras) */}
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre Completo:</label>
-          <input 
-            type="text" 
-            id="nombre"
-            name="nombre" 
-            value={formData.nombre} 
-            onChange={handleChange} 
-            required 
-            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
-            title="Solo se permiten letras y espacios"
-            placeholder="Ej. María Pérez"
-          />
-        </div>
-
-        {/* CORREO (Validación con @ y Dominio) */}
-        <div className="form-group">
-          <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            placeholder="ejemplo@correo.com"
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-            title="Ingresa un correo válido que incluya '@' y un dominio (ej: usuario@dominio.com)"
-          />
-        </div>
-
-        {/* DIRECCIÓN */}
-        <div className="form-group">
-          <label htmlFor="direccion">Dirección de Entrega:</label>
-          <input 
-            type="text" 
-            id="direccion"
-            name="direccion" 
-            value={formData.direccion} 
-            onChange={handleChange} 
-            required 
-            placeholder="Calle 123 #45-67"
-          />
-        </div>
-
-        {/* MÉTODO DE PAGO */}
-        <div className="form-group">
-          <label htmlFor="metodoPago">Método de Pago:</label>
-          <select 
-            id="metodoPago"
-            name="metodoPago" 
-            value={formData.metodoPago} 
-            onChange={handleChange}
-          >
-            <option value="tarjeta">Tarjeta de Crédito / Débito</option>
-            <option value="nequi">Nequi / Daviplata</option>
-            <option value="efectivo">Efectivo contra entrega</option>
-          </select>
-        </div>
-
-        <button type="submit" className="submit-btn" disabled={items.length === 0}>
-          Finalizar Pedido (${totalPagar.toLocaleString()})
-        </button>
+        <h3>Datos de Entrega</h3>
+        <div className="form-group"><label htmlFor="nombre">Nombre Completo:</label><input id="nombre" value={user.name} readOnly /></div>
+        <div className="form-group"><label htmlFor="email">Correo Electrónico:</label><input id="email" value={user.email} readOnly /></div>
+        <div className="form-group"><label htmlFor="direccion">Dirección de Entrega:</label><input type="text" id="direccion" value={address} onChange={(event) => setAddress(event.target.value)} required placeholder="Calle 123 #45-67" /></div>
+        <div className="form-group"><label htmlFor="metodo-pago">Método de Pago:</label><select id="metodo-pago" value={paymentMethodId} onChange={(event) => setPaymentMethodId(event.target.value)} required><option value="">Selecciona un método</option>{paymentMethods.map((method) => <option key={method.id} value={method.id}>{method.name}</option>)}</select></div>
+        <button type="submit" className="submit-btn" disabled={items.length === 0 || sending || !paymentMethodId}>{sending ? 'Creando pedido...' : `Finalizar Pedido ($${totalPagar.toLocaleString()})`}</button>
       </form>
     </div>
   );

@@ -10,7 +10,11 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with('category')->where('active', true);
+        $query = Product::with('category');
+
+        if (! ($request->boolean('include_inactive') && $request->user()?->role === 'admin')) {
+            $query->where('active', true);
+        }
 
         if ($request->has('category_id')) {
             $query->where('category_id', $request->category_id);

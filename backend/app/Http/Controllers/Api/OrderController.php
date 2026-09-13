@@ -14,16 +14,30 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        return $request->user()
-            ->orders()
-            ->with('items.product', 'statusHistory')
-            ->latest()
-            ->get();
+        $user = $request->user();
+        $query = Order::with('items.product', 'statusHistory', 'address', 'user');
+
+        if ($user->role === 'client') {
+            $query->where('user_id', $user->id);
+        } elseif ($user->role === 'cook') {
+            $query->whereIn('status', ['pending', 'preparing']);
+        } elseif ($user->role === 'courier') {
+            $query->where('status', 'shipped')
+                ->where(function ($orders) use ($user) {
+                    $orders->where('courier_id', $user->id)->orWhereNull('courier_id');
+                });
+        } elseif ($user->role !== 'admin') {
+            abort(403, 'Rol no autorizado.');
+        }
+
+        return $query->latest()->get();
     }
 
     public function show(Request $request, Order $order)
     {
-        $this->authorizeOwner($request, $order);
+        if ($request->user()->role === 'client') {
+            $this->authorizeOwner($request, $order);
+        }
 
         return $order->load('items.product', 'payments', 'statusHistory', 'address');
     }
@@ -81,6 +95,22 @@ class OrderController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:pending,preparing,shipped,delivered,cancelled',
         ]);
+
+        $role = $request->user()->role;
+        $allowed = match ($role) {
+            'cook' => ['pending' => ['preparing'], 'preparing' => ['shipped']],
+            'courier' => ['shipped' => ['delivered']],
+            'admin' => [
+                'pending' => ['preparing', 'cancelled'],
+                'preparing' => ['shipped', 'cancelled'],
+                'shipped' => ['delivered', 'cancelled'],
+            ],
+            default => [],
+        };
+
+        if (! in_array($validated['status'], $allowed[$order->status] ?? [], true)) {
+            abort(422, 'La transición de estado no está permitida para este rol.');
+        }
 
         DB::transaction(function () use ($order, $validated) {
             OrderStatusHistory::create([

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './registration.css';
-
-const correosExistentes = ['ferchys@postres.com', 'admin@correo.com', 'cliente@prueba.com'];
+import { apiRequest } from '../../services/api';
+import { useAuth } from '../../context/auth';
 
 export default function Registration() {
   const [formData, setFormData] = useState({
@@ -15,9 +15,8 @@ export default function Registration() {
   });
   const [registradoExitoso, setRegistradoExitoso] = useState(false);
   const [errorMensaje, setErrorMensaje] = useState('');
-
-  // Base de datos simulada
-  const correosExistentes = ['ferchys@postres.com', 'admin@correo.com', 'cliente@prueba.com'];
+  const [enviando, setEnviando] = useState(false);
+  const { register } = useAuth();
 
   const cerrarError = () => {
     setErrorMensaje('');
@@ -46,7 +45,7 @@ export default function Registration() {
     const { nombre, telefono, direccion, correo, clave, confirmarClave } = formData;
 
     // Expresión regular para validar seguridad de la contraseña
-    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{6,}$/;
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{8,}$/;
 
     const validaciones = [
       {
@@ -55,15 +54,11 @@ export default function Registration() {
       },
       {
         condicion: !regexPassword.test(clave),
-        mensaje: 'La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).',
+        mensaje: 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial.',
       },
       {
         condicion: clave !== confirmarClave,
         mensaje: 'Las contraseñas no coinciden. Por favor, revísalas.',
-      },
-      {
-        condicion: correosExistentes.includes(correo.trim().toLowerCase()),
-        mensaje: 'Este correo electrónico ya se encuentra registrado. Intenta iniciar sesión.',
       },
     ];
 
@@ -74,8 +69,21 @@ export default function Registration() {
       return;
     }
 
-    console.log('Usuario registrado con éxito:', { nombre, correo, telefono, direccion });
-    setRegistradoExitoso(true);
+    setEnviando(true);
+    register({
+      name: nombre.trim(),
+      email: correo.trim().toLowerCase(),
+      password: clave,
+      password_confirmation: confirmarClave,
+      phone: telefono,
+    })
+      .then(() => apiRequest('/addresses', {
+        method: 'POST',
+        body: JSON.stringify({ full_address: direccion.trim(), is_default: true }),
+      }))
+      .then(() => setRegistradoExitoso(true))
+      .catch((error) => setErrorMensaje(error.message))
+      .finally(() => setEnviando(false));
   };
 
   return (
@@ -172,7 +180,7 @@ export default function Registration() {
               type="password"
               id="clave"
               name="clave"
-              placeholder="Mínimo 6 caracteres (mayúscula, minúscula, número y símbolo)"
+              placeholder="Mínimo 8 caracteres (mayúscula, minúscula, número y símbolo)"
               value={formData.clave}
               onChange={handleChange}
               required
@@ -191,7 +199,7 @@ export default function Registration() {
               required
             />
 
-            <button type="submit">Registrarse</button>
+            <button type="submit" disabled={enviando}>{enviando ? 'Registrando...' : 'Registrarse'}</button>
           </form>
 
           <p>

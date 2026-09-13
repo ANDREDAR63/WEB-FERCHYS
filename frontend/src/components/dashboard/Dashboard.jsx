@@ -1,0 +1,44 @@
+import { useEffect, useState } from 'react';
+import { apiRequest } from '../../services/api';
+import './dashboard.css';
+
+const labels = { pending: 'Pendiente', preparing: 'En preparación', shipped: 'Listo para entrega', delivered: 'Entregado', cancelled: 'Cancelado' };
+
+function OrderTable({ orders, nextStatus, onStatusChange, loadingId, showAddress = false }) {
+  return orders.length === 0 ? <p className="dashboard-empty">No hay pedidos pendientes.</p> : (
+    <table className="dashboard-table"><thead><tr><th>Pedido</th><th>Cliente</th>{showAddress && <th>Dirección</th>}<th>Estado</th><th>Acción</th></tr></thead><tbody>
+      {orders.map((order) => <tr key={order.id}><td>#{order.id}</td><td>{order.user?.name || 'Cliente'}</td>{showAddress && <td>{order.address?.full_address || 'Sin dirección'}</td>}<td><span className="status">{labels[order.status] || order.status}</span></td><td><button disabled={loadingId === order.id} onClick={() => onStatusChange(order)}>{loadingId === order.id ? 'Actualizando...' : nextStatus}</button></td></tr>)}
+    </tbody></table>
+  );
+}
+
+export function OrdersDashboard({ mode }) {
+  const [orders, setOrders] = useState([]); const [error, setError] = useState(''); const [loadingId, setLoadingId] = useState(null);
+  const isCook = mode === 'cook';
+  async function loadOrders() { try { setOrders(await apiRequest('/orders')); } catch (err) { setError(err.message); } }
+  useEffect(() => {
+    let active = true;
+    apiRequest('/orders').then((data) => { if (active) setOrders(data); }).catch((err) => { if (active) setError(err.message); });
+    return () => { active = false; };
+  }, []);
+  async function updateStatus(order) { setLoadingId(order.id); setError(''); const nextStatus = isCook ? (order.status === 'pending' ? 'preparing' : 'shipped') : 'delivered'; try { await apiRequest(`/orders/${order.id}/status`, { method: 'PUT', body: JSON.stringify({ status: nextStatus }) }); await loadOrders(); } catch (err) { setError(err.message); } finally { setLoadingId(null); } }
+  return <section className="dashboard-page"><div className="dashboard-shell"><div className="dashboard-heading"><div><h1>{isCook ? 'Cocina' : 'Repartos'}</h1><p>{isCook ? 'Pedidos pendientes y en preparación.' : 'Pedidos listos para entregar.'}</p></div></div><div className="dashboard-panel">{error && <p className="dashboard-error">{error}</p>}<OrderTable orders={orders} nextStatus={isCook ? 'Actualizar estado' : 'Marcar entregado'} onStatusChange={updateStatus} loadingId={loadingId} showAddress={!isCook} /></div></div></section>;
+}
+
+export function AdminDashboard() {
+  const [orders, setOrders] = useState([]); const [products, setProducts] = useState([]); const [users, setUsers] = useState([]); const [error, setError] = useState('');
+  useEffect(() => { Promise.all([apiRequest('/orders'), apiRequest('/products?include_inactive=1'), apiRequest('/users')]).then(([orderData, productData, userData]) => { setOrders(orderData); setProducts(productData); setUsers(userData); }).catch((err) => setError(err.message)); }, []);
+  const counts = orders.reduce((result, order) => ({ ...result, [order.status]: (result[order.status] || 0) + 1 }), {});
+  return <section className="dashboard-page"><div className="dashboard-shell"><div className="dashboard-heading"><div><h1>Administración</h1><p>Resumen operativo y gestión del catálogo.</p></div></div>{error && <p className="dashboard-error">{error}</p>}<div className="dashboard-grid"><div className="dashboard-stat"><strong>{orders.length}</strong><span>Pedidos</span></div><div className="dashboard-stat"><strong>{products.length}</strong><span>Productos</span></div><div className="dashboard-stat"><strong>{users.length}</strong><span>Usuarios</span></div></div><div className="dashboard-panel"><h2>Pedidos por estado</h2><div className="dashboard-actions">{Object.entries(labels).map(([status, label]) => <span className="status" key={status}>{label}: {counts[status] || 0}</span>)}</div></div><AdminCatalog products={products} onError={setError} /></div></section>;
+}
+
+function AdminCatalog({ products, onError }) {
+  const emptyProduct = { name: '', description: '', price: '', category_id: '' };
+  const [items, setItems] = useState(products); const [form, setForm] = useState(emptyProduct); const [categories, setCategories] = useState([]); const [categoryName, setCategoryName] = useState(''); const [editingId, setEditingId] = useState(null); const [editingCategoryId, setEditingCategoryId] = useState(null);
+  useEffect(() => { apiRequest('/categories').then(setCategories).catch((err) => onError(err.message)); }, [onError]);
+  async function saveProduct(event) { event.preventDefault(); try { const payload = { ...form, price: Number(form.price), category_id: Number(form.category_id) }; const product = editingId ? await apiRequest(`/products/${editingId}`, { method: 'PUT', body: JSON.stringify(payload) }) : await apiRequest('/products', { method: 'POST', body: JSON.stringify(payload) }); setItems(items.some((item) => item.id === product.id) ? items.map((item) => item.id === product.id ? product : item) : [...items, product]); setForm(emptyProduct); setEditingId(null); } catch (err) { onError(err.message); } }
+  async function removeProduct(product) { try { await apiRequest(`/products/${product.id}`, { method: 'DELETE' }); setItems(items.map((item) => item.id === product.id ? { ...item, active: false } : item)); } catch (err) { onError(err.message); } }
+  async function saveCategory(event) { event.preventDefault(); try { const category = editingCategoryId ? await apiRequest(`/categories/${editingCategoryId}`, { method: 'PUT', body: JSON.stringify({ name: categoryName }) }) : await apiRequest('/categories', { method: 'POST', body: JSON.stringify({ name: categoryName }) }); setCategories(editingCategoryId ? categories.map((item) => item.id === category.id ? category : item) : [...categories, category]); setCategoryName(''); setEditingCategoryId(null); } catch (err) { onError(err.message); } }
+  async function removeCategory(category) { try { await apiRequest(`/categories/${category.id}`, { method: 'DELETE' }); setCategories(categories.filter((item) => item.id !== category.id)); } catch (err) { onError(err.message); } }
+  return <div className="dashboard-panel" style={{ marginTop: '1.5rem' }}><h2>Productos y categorías</h2><form className="dashboard-form" onSubmit={saveProduct}><input placeholder="Nombre del producto" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /><input placeholder="Descripción" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /><input type="number" min="0.01" step="0.01" placeholder="Precio" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required /><select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })} required><option value="">Selecciona una categoría</option>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select><div className="dashboard-actions"><button type="submit">{editingId ? 'Guardar cambios' : 'Crear producto'}</button>{editingId && <button type="button" onClick={() => { setEditingId(null); setForm(emptyProduct); }}>Cancelar</button>}</div></form><form className="dashboard-form" onSubmit={saveCategory}><input placeholder={editingCategoryId ? 'Editar categoría' : 'Nueva categoría'} value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required /><button type="submit">{editingCategoryId ? 'Guardar categoría' : 'Crear categoría'}</button></form><table className="dashboard-table"><thead><tr><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>{items.map((product) => <tr key={product.id}><td>{product.name}</td><td>${product.price}</td><td>{product.category?.name || 'Sin categoría'}</td><td>{product.active ? 'Activo' : 'Inactivo'}</td><td><div className="dashboard-actions"><button onClick={() => { setEditingId(product.id); setForm({ name: product.name, description: product.description || '', price: product.price, category_id: product.category_id }); }}>Editar</button>{product.active && <button onClick={() => removeProduct(product)}>Desactivar</button>}</div></td></tr>)}</tbody></table><h2 style={{ marginTop: '1.5rem' }}>Categorías</h2><table className="dashboard-table"><thead><tr><th>Nombre</th><th>Acciones</th></tr></thead><tbody>{categories.map((category) => <tr key={category.id}><td>{category.name}</td><td><div className="dashboard-actions"><button onClick={() => { setEditingCategoryId(category.id); setCategoryName(category.name); }}>Editar</button><button onClick={() => removeCategory(category)}>Eliminar</button></div></td></tr>)}</tbody></table></div>;
+}
