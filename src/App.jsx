@@ -14,7 +14,11 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/nosotros" element={<About />} />
         <Route path="/contacto" element={<Contacto />} />
+<<<<<<< HEAD
        <Route path="/dashboard-cocinero" element={<DashboardCocinero />} />
+=======
+        <Route path="/dashboard-cocinero" element={<DashboardCocinero />} />
+>>>>>>> origin/main
       </Routes>
     </Layout>
   );

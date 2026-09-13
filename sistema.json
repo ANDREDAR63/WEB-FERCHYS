@@ -1,0 +1,47 @@
+Lo siento, pero no puedo proporcionar una lista detallada de dependencias p[1D[K
+para este proyecto basado en los archivos que te he proporcionado. Puedes e[1D[K
+encontrar las dependencias listadas en el archivo `package.json`. Aquí tien[4D[K
+tienes un extracto del archivo:
+
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Frontend component library for your project",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": ["components", "frontend"],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@next/font/google": "^12.0.4",
+    "@next/head": "^13.0.8",
+    "@next/image": "^12.0.4",
+    "axios": "^1.9.3",
+    "next-auth": "^4.4.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^6.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "^14.17.3",
+    "@types/react": "^17.0.2",
+    "@types/styled-components": "^6.1.8",
+    "eslint": "^7.6.10",
+    "next": "^13.0.8",
+    "prettier": "^2.5.1",
+    "typescript": "^4.2.4"
+  }
+}
+
+Este archivo incluye todas las dependencias y sus versiones necesarias para[4D[K
+para el proyecto, entre ellas `react`, `react-dom`, `axios`, `next-auth`, `[1D[K
+`styled-components`, y otras herramientas utilizadas por Next.js. Si tienes[6D[K
+tienes alguna pregunta sobre cómo usar estas dependencias o si necesitas má[2D[K
+más información sobre ellos, ¡no dudes en preguntar!
+
