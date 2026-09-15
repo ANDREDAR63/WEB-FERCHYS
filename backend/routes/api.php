@@ -44,13 +44,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/addresses', [AddressController::class, 'index']);
     Route::post('/addresses', [AddressController::class, 'store']);
 
-    Route::apiResource('ingredients', IngredientController::class);
-    Route::apiResource('promotions', PromotionController::class)->except(['index', 'show']);
+    Route::middleware('role:admin,cook')->group(function () {
+        Route::get('/ingredients', [IngredientController::class, 'index']);
+        Route::get('/ingredients/{ingredient}', [IngredientController::class, 'show']);
+    });
 
-    // Solo estas acciones administrativas requieren login
-    Route::apiResource('categories', CategoryController::class)->except(['index', 'show'])
-        ->middleware('role:admin');
-    Route::apiResource('products', ProductController::class)->except(['index', 'show'])
-        ->middleware('role:admin');
-    Route::get('/users', [UserController::class, 'index'])->middleware('role:admin');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin/products', [ProductController::class, 'index']);
+        Route::get('/admin/promotions', [PromotionController::class, 'index']);
+        Route::apiResource('ingredients', IngredientController::class)->except(['index', 'show']);
+        Route::apiResource('promotions', PromotionController::class)->except(['index', 'show']);
+        Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+        Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+        Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'update']);
+        Route::patch('/users/{user}/role', [UserController::class, 'updateRole']);
+        Route::get('/payments', [PaymentController::class, 'index']);
+    });
 });

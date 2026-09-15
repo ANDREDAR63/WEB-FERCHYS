@@ -10,6 +10,19 @@ const obtenerImagen = (nombreArchivo) => {
   return ruta ? imagenes[ruta].default : '';
 };
 
+const imagenesPorProducto = {
+  Suspiros: 'favicon-rosa',
+  Profiteroles: 'favicon-rosa',
+  Alfajores: 'favicon-rosa',
+  'Cheesecake de limón': 'cheesecake_limon',
+  'Cheesecake de maracuyá': 'cheesecake_maracuya',
+  'Cheesecake de chocolate': 'cheesecake_chocolate',
+  'Cheesecake de arándano': 'cheesecake_arandano',
+  'Cheesecake de papayuela': 'cheesecake_papayuela',
+  'Cheesecake de red velvet': 'cheesecake_redvelvet',
+  'Refractaria familiar de cheesecake': 'cheesecakes-grandes',
+};
+
 const productosIniciales = [
     {
     id: 1, categoria: 'horneados',
@@ -101,7 +114,7 @@ const Catalogo = () => {
         nombre: product.name,
         descripcion: product.description || '',
         precio: Number(product.price),
-        img: product.image_url || obtenerImagen('favicon-rosa'),
+        img: product.image_url || obtenerImagen(imagenesPorProducto[product.name] || 'favicon-rosa'),
         badge: '',
       }))))
       .catch((requestError) => {
