@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         $query = Product::with('category');
 
-        if (! ($request->boolean('include_inactive') && $request->user()?->role === 'admin')) {
+        if ($request->user()?->role !== 'admin') {
             $query->where('active', true);
         }
 

@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         foreach (['Tarjeta de crédito', 'Nequi', 'Efectivo contra entrega'] as $name) {
             PaymentMethod::firstOrCreate(['name' => $name]);
         }
+
+        $this->call(ProductSeeder::class);
     }
 }

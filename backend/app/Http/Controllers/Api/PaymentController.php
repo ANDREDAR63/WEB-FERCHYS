@@ -11,6 +11,13 @@ use Illuminate\Validation\ValidationException;
 
 class PaymentController extends Controller
 {
+    public function index()
+    {
+        return Payment::with(['order.user', 'paymentMethod'])
+            ->latest('paid_at')
+            ->get();
+    }
+
     public function store(Request $request, Order $order)
     {
         if ($order->user_id !== $request->user()->id) {

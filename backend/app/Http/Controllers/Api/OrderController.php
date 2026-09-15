@@ -15,12 +15,18 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $query = Order::with('items.product', 'statusHistory', 'address', 'user');
+        $query = Order::with('items.product.ingredients', 'statusHistory', 'address', 'user', 'payments.paymentMethod');
 
         if ($user->role === 'client') {
             $query->where('user_id', $user->id);
         } elseif ($user->role === 'cook') {
-            $query->whereIn('status', ['pending', 'preparing']);
+            $query->where(function ($orders) {
+                $orders->where('status', 'preparing')
+                    ->orWhere(function ($pendingOrders) {
+                        $pendingOrders->where('status', 'pending')
+                            ->whereHas('payments', fn ($payments) => $payments->where('status', 'approved'));
+                    });
+            });
         } elseif ($user->role === 'courier') {
             $query->where('status', 'shipped')
                 ->where(function ($orders) use ($user) {
@@ -39,7 +45,7 @@ class OrderController extends Controller
             $this->authorizeOwner($request, $order);
         }
 
-        return $order->load('items.product', 'payments', 'statusHistory', 'address');
+        return $order->load('items.product.ingredients', 'payments', 'statusHistory', 'address');
     }
 
     public function store(Request $request)
