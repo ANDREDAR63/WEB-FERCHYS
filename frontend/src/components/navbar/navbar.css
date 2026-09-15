@@ -118,6 +118,27 @@
   box-shadow: 0 6px 16px rgba(128, 79, 93, 0.3);
 }
 
+.navbar__logout {
+  border: 1px solid rgba(128, 79, 93, 0.2);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--color-oscuro);
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 2.8rem;
+  white-space: nowrap;
+}
+
+.navbar__logout:hover {
+  background: rgba(128, 79, 93, 0.08);
+  border-color: rgba(128, 79, 93, 0.35);
+  color: var(--color-primario);
+}
+
 .navbar__cart-wrapper {
   position: relative;
 }
@@ -273,6 +294,10 @@
   }
 
   .navbar__cta {
+    align-self: flex-start;
+  }
+
+  .navbar__logout {
     align-self: flex-start;
   }
 

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../../services/api';
+import { useAuth } from '../../context/auth';
 import './navbar.css';
 import logo from '../../assets/logo.ico';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -38,13 +41,20 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { to: '/',          label: 'Inicio' },
+    {to: '/',          label: 'Inicio' },
     { to: '/catalogo',  label: 'Catálogo' },
     { to: '/nosotros',  label: 'Nosotros' },
     { to: '/contacto',  label: 'Contacto' },
   ];
 
   const totalProductos = cartItems.reduce((total, item) => total + item.cantidad, 0);
+
+  const manejarCierreSesion = async () => {
+    setMenuOpen(false);
+    setCartOpen(false);
+    await logout();
+    navigate('/');
+  };
 
   return (
     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
@@ -73,13 +83,23 @@ const Navbar = () => {
             </li>
           ))}
           <li>
-            <NavLink
-              to="/login"
-              className="navbar__cta"
-              onClick={() => setMenuOpen(false)}
-            >
-              Iniciar Sesión
-            </NavLink>
+            {user ? (
+              <button
+                type="button"
+                className="navbar__logout"
+                onClick={manejarCierreSesion}
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <NavLink
+                to="/login"
+                className="navbar__cta"
+                onClick={() => setMenuOpen(false)}
+              >
+                Iniciar Sesión
+              </NavLink>
+            )}
           </li>
           <li className="navbar__cart-wrapper">
             <button
