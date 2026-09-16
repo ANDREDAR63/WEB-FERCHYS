@@ -10,25 +10,24 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const manejarEnvio = (e) => {
-    e.preventDefault();
-    setErrorMensaje('');
+const manejarEnvio = async (e) => {
+  e.preventDefault();
+  setErrorMensaje('');
 
-    // Expresión regular que valida los requisitos de seguridad de la contraseña
-    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{6,}$/;
+  const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{6,}$/;
+  if (!regexPassword.test(clave)) {
+    setErrorMensaje('La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).');
+    return;
+  }
 
-    // Validación de seguridad de la contraseña al iniciar sesión
-    if (!regexPassword.test(clave)) {
-      setErrorMensaje('La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial (como *, #, $, etc.).');
-      return;
-    }
-
-    login(correo, clave).then((user) => {
-      const dashboard = { admin: '/dashboard/admin', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
-      navigate(dashboard || '/');
-    }).catch((error) => setErrorMensaje(error.message));
-  };
-
+  try {
+    const user = await login(correo, clave);
+    const dashboard = { admin: '/dashboard/admin', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
+    navigate(dashboard || '/', { replace: true });
+  } catch (error) {
+    setErrorMensaje(error.message);
+  }
+};
   return (
     <section className="acceso-usuarios">
       <h2>Ingresa a tu cuenta</h2>
