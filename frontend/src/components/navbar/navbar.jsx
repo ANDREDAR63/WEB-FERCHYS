@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../../services/api';
 import { useAuth } from '../../context/auth';
+import { itemQuantity, readGuestCart } from '../../services/guestCart';
 import './navbar.css';
 import logo from '../../assets/logo.ico';
 
@@ -23,7 +24,7 @@ const Navbar = () => {
 
     const syncCart = () => {
       if (!localStorage.getItem('ferchys-token')) {
-        setCartItems([]);
+        setCartItems(readGuestCart());
         return;
       }
       apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
@@ -47,7 +48,7 @@ const Navbar = () => {
     { to: '/contacto',  label: 'Contacto' },
   ];
 
-  const totalProductos = cartItems.reduce((total, item) => total + item.cantidad, 0);
+  const totalProductos = cartItems.reduce((total, item) => total + itemQuantity(item), 0);
 
   const manejarCierreSesion = async () => {
     setMenuOpen(false);

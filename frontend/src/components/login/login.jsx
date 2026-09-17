@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import './login.css';
 import { useAuth } from '../../context/auth';
 
@@ -8,6 +8,7 @@ export default function Login() {
   const [clave, setClave] = useState('');
   const [errorMensaje, setErrorMensaje] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
 const manejarEnvio = async (e) => {
@@ -23,7 +24,7 @@ const manejarEnvio = async (e) => {
   try {
     const user = await login(correo, clave);
     const dashboard = { admin: '/dashboard/admin', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
-    navigate(dashboard || '/', { replace: true });
+    navigate(dashboard || location.state?.from || '/', { replace: true });
   } catch (error) {
     setErrorMensaje(error.message);
   }
@@ -77,7 +78,7 @@ const manejarEnvio = async (e) => {
 
       <p style={{ marginTop: '1rem' }}>
         ¿Aún no tienes una cuenta?{' '}
-        <NavLink to="/registration">Regístrate aquí</NavLink>
+        <NavLink to="/registration" state={location.state}>Regístrate aquí</NavLink>
       </p>
 
       <p>

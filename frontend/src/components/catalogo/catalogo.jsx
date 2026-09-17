@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRequest } from '../../services/api';
 import { useAuth } from '../../context/auth';
+import { itemQuantity, readGuestCart, upsertGuestItem, writeGuestCart } from '../../services/guestCart';
 import './catalogo.css';
 
 const imagenes = import.meta.glob('../../assets/*', { eager: true });
@@ -101,22 +102,28 @@ const categorias = [
 const Catalogo = () => {
   const [activo, setActivo] = useState('todos');
   const [productos, setProductos] = useState([]);
-  const [carritoActual, setCarritoActual] = useState([]);
+  const [carritoActual, setCarritoActual] = useState(readGuestCart);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
 
   useEffect(() => {
     apiRequest('/products')
-      .then((data) => setProductos(data.map((product) => ({
-        ...product,
-        categoria: product.category?.name?.toLowerCase() || 'otros',
-        nombre: product.name,
-        descripcion: product.description || '',
-        precio: Number(product.price),
-        img: product.image_url || obtenerImagen(imagenesPorProducto[product.name] || 'favicon-rosa'),
-        badge: '',
-      }))))
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) {
+          setProductos(productosIniciales);
+          return;
+        }
+        setProductos(data.map((product) => ({
+          ...product,
+          categoria: product.category?.name?.toLowerCase() || 'otros',
+          nombre: product.name,
+          descripcion: product.description || '',
+          precio: Number(product.price),
+          img: product.image_url || obtenerImagen(imagenesPorProducto[product.name] || 'favicon-rosa'),
+          badge: '',
+        })));
+      })
       .catch((requestError) => {
         setError(requestError.message);
         setProductos(productosIniciales);
@@ -124,7 +131,9 @@ const Catalogo = () => {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('ferchys-token')) return;
+    if (!localStorage.getItem('ferchys-token')) {
+      return;
+    }
     apiRequest('/cart')
       .then((cart) => {
         setCarritoActual(cart.items || []);
@@ -139,7 +148,10 @@ const Catalogo = () => {
 
   const actualizarCarrito = (producto, cantidad) => {
     if (!user) {
-      navigate('/login');
+      const carrito = upsertGuestItem(carritoActual, producto, cantidad);
+      setCarritoActual(carrito);
+      writeGuestCart(carrito);
+      window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
       return;
     }
     setCarritoActual((prevCarrito) => {
@@ -164,13 +176,13 @@ const Catalogo = () => {
 
   const agregarAlCarrito = (producto) => {
     const productoExistente = carritoActual.find((item) => item.product_id === producto.id);
-    const nuevaCantidad = productoExistente ? productoExistente.cantidad + 1 : 1;
+    const nuevaCantidad = productoExistente ? itemQuantity(productoExistente) + 1 : 1;
     actualizarCarrito(producto, nuevaCantidad);
   };
 
   const cambiarCantidad = (producto, delta) => {
     const productoExistente = carritoActual.find((item) => item.product_id === producto.id);
-    const nuevaCantidad = productoExistente ? productoExistente.cantidad + delta : 1;
+    const nuevaCantidad = productoExistente ? itemQuantity(productoExistente) + delta : 1;
     actualizarCarrito(producto, Math.max(0, nuevaCantidad));
   };
 
@@ -205,7 +217,7 @@ const Catalogo = () => {
         <div className="catalogo__grid">
           {filtrados.map(producto => {
             const itemCarrito = carritoActual.find((item) => item.product_id === producto.id);
-            const cantidadActual = itemCarrito?.cantidad || 0;
+            const cantidadActual = itemCarrito ? itemQuantity(itemCarrito) : 0;
 
             return (
               <article key={producto.id} className="card-producto">
@@ -266,7 +278,7 @@ const Catalogo = () => {
         {carritoActual.length > 0 && (
           <div className="catalogo__resumen">
             <div className="catalogo__resumen-info">
-              <strong>{carritoActual.reduce((total, item) => total + item.cantidad, 0)} productos</strong>
+              <strong>{carritoActual.reduce((total, item) => total + itemQuantity(item), 0)} productos</strong>
               <span>en tu selección</span>
             </div>
             <button type="button" className="catalogo__resumen-btn" onClick={() => navigate('/carrito')}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import './registration.css';
 import { apiRequest } from '../../services/api';
 import { useAuth } from '../../context/auth';
@@ -17,6 +17,8 @@ export default function Registration() {
   const [errorMensaje, setErrorMensaje] = useState('');
   const [enviando, setEnviando] = useState(false);
   const { register } = useAuth();
+  const location = useLocation();
+  const returnPath = location.state?.from || '/';
 
   const cerrarError = () => {
     setErrorMensaje('');
@@ -111,7 +113,7 @@ export default function Registration() {
           <p>Te has registrado correctamente en Ferchy's Postres.</p>
           <p className="mensaje-exito__texto">Ya puedes disfrutar de nuestros dulces momentos.</p>
 
-          <NavLink to="/login" className="btn btn-primario">
+          <NavLink to={returnPath} className="btn btn-primario">
             Iniciar Sesión
           </NavLink>
         </div>
