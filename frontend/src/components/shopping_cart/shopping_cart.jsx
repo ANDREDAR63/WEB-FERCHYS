@@ -10,6 +10,7 @@ function Carrito() {
   const [products, setProducts] = useState([]);
   const [productId, setProductId] = useState('');
   const [address, setAddress] = useState('');
+  const [savedAddresses, setSavedAddresses] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentMethodId, setPaymentMethodId] = useState('');
   const [error, setError] = useState('');
@@ -35,13 +36,17 @@ function Carrito() {
       cartRequest,
       apiRequest('/products'),
       apiRequest('/payment-methods'),
+      user ? apiRequest('/addresses') : Promise.resolve([]),
     ])
-      .then(([cart, productData, paymentMethodData]) => {
+      .then(([cart, productData, paymentMethodData, addressData]) => {
         setItems(cart.items || []);
         setProducts(productData);
         setProductId(String(productData[0]?.id || ''));
         setPaymentMethods(paymentMethodData);
         setPaymentMethodId(String(paymentMethodData[0]?.id || ''));
+        setSavedAddresses(addressData);
+        const defaultAddress = addressData.find((item) => item.is_default) || addressData[0];
+        setAddress(defaultAddress?.full_address || '');
       })
       .catch((requestError) => setError(requestError.message));
   }, [user]);
@@ -94,13 +99,18 @@ function Carrito() {
       return;
     }
     setSending(true);
-    apiRequest('/addresses', {
-      method: 'POST',
-      body: JSON.stringify({ full_address: address.trim(), is_default: true }),
-    })
-      .then((createdAddress) => apiRequest('/orders', {
+    const enteredAddress = address.trim();
+    const existingAddress = savedAddresses.find((item) => item.full_address.trim() === enteredAddress);
+    const addressRequest = existingAddress
+      ? Promise.resolve(existingAddress)
+      : apiRequest('/addresses', {
         method: 'POST',
-        body: JSON.stringify({ address_id: createdAddress.id }),
+        body: JSON.stringify({ full_address: enteredAddress, is_default: true }),
+      });
+    addressRequest
+      .then((selectedAddress) => apiRequest('/orders', {
+        method: 'POST',
+        body: JSON.stringify({ address_id: selectedAddress.id }),
       }))
       .then((order) => apiRequest(`/orders/${order.id}/payments`, {
         method: 'POST',
