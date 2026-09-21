@@ -59,7 +59,16 @@ export default function NavbarClient() {
           <li><NavLink to="/catalogo" className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Catálogo</NavLink></li>
           <li><NavLink to="/dashboard/cliente" end className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Mis compras</NavLink></li>
           <li className="navbar__cart-wrapper">
-            <button type="button" className="navbar__cart" onClick={() => { setMenuOpen(false); setCartOpen((prev) => !prev); }} aria-label="Carrito de compras">
+            <button type="button" className="navbar__cart" onClick={() => {
+              setMenuOpen(false);
+              const isMobile = window.innerWidth <= 768;
+              if (isMobile) {
+                setCartOpen(false);
+                navigate('/carrito');
+                return;
+              }
+              setCartOpen((prev) => !prev);
+            }} aria-label="Carrito de compras">
               Carrito 🛒 {totalProductos > 0 && <span>({totalProductos})</span>}
             </button>
             {cartOpen && (

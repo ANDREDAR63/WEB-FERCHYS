@@ -108,6 +108,12 @@ const Navbar = () => {
               className="navbar__cart"
               onClick={() => {
                 setMenuOpen(false);
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                  setCartOpen(false);
+                  navigate('/carrito');
+                  return;
+                }
                 setCartOpen((prev) => !prev);
               }}
               aria-label="Carrito de compras"
