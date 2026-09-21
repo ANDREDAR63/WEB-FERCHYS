@@ -41,7 +41,6 @@ const Footer = () => {
             <ul className="footer__links">
               <li><Link to="/catalogo">Cheesecakes</Link></li>
               <li><Link to="/catalogo">Alfajores</Link></li>
-              <li><Link to="/catalogo">Profiteroles</Link></li>
               <li><Link to="/catalogo">Cajas Surtidas</Link></li>
             </ul>
           </div>

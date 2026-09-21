@@ -126,8 +126,8 @@ const Navbar = () => {
                   <div className="navbar__cart-items">
                     {cartItems.map((item) => (
                       <div key={item.id} className="navbar__cart-item">
-                        <span>{item.nombre}</span>
-                        <strong>x{item.cantidad}</strong>
+                        <span>{item.product?.name || item.nombre || 'Producto'}</span>
+                        <strong>x{itemQuantity(item)}</strong>
                       </div>
                     ))}
                     <div className="navbar__cart-summary">

@@ -14,9 +14,7 @@ const DashboardLayout = () => {
 
   return (
     <main className="dashboard-layout">
-      <button type="button" className="dashboard-logout" onClick={manejarCierreSesion}>
-        Cerrar sesión
-      </button>
+      <button type="button" className="dashboard-logout" onClick={manejarCierreSesion}>Cerrar sesión</button>
       <Outlet />
     </main>
   );

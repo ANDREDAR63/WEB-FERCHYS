@@ -23,7 +23,7 @@ const manejarEnvio = async (e) => {
 
   try {
     const user = await login(correo, clave);
-    const dashboard = { admin: '/dashboard/admin', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
+    const dashboard = { admin: '/dashboard/admin', client: '/catalogo', cook: '/dashboard/cocinero', courier: '/dashboard/repartidor' }[user.role];
     navigate(dashboard || location.state?.from || '/', { replace: true });
   } catch (error) {
     setErrorMensaje(error.message);

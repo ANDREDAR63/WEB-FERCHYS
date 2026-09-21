@@ -19968,7 +19968,6 @@ const Footer = () => {
             <ul className="footer__links">
               <li><Link to="/catalogo">Cheesecakes</Link></li>
               <li><Link to="/catalogo">Alfajores</Link></li>
-              <li><Link to="/catalogo">Profiteroles</Link></li>
               <li><Link to="/catalogo">Cajas Surtidas</Link></li>
             </ul>
           </div>
@@ -20383,7 +20382,7 @@ const Hero = () => {
             <em>endulza</em> tu día
           </h1>
           <p className="hero__subtitle">
-            Cheesecakes, alfajores, profiteroles y más — preparados artesanalmente, con
+            Cheesecakes, alfajores y más — preparados artesanalmente, con
             ingredientes de la mejor calidad para cada ocasión especial.
           </p>
 
@@ -21430,7 +21429,6 @@ const productos = [
   },
   {
     id: 2, categoria: 'horneados',
-    img:obtenerImagen('favicon-rosa'), nombre: 'Profiteroles',
     descripcion: 'Repollas rellenas de arequipe artesanal para una nota extra de sabor.',
     precio: '$5.000', badge: '',
   },
@@ -23158,7 +23156,6 @@ import './shopping_cart.css';
 // 1. Lista fija de 10 productos disponibles para agregar
 const PRODUCTOS_DISPONIBLES = [
   { id: 'p1', nombre: 'Suspiros', precio: 3000 },
-  { id: 'p2', nombre: 'Profiteroles', precio: 5000 },
   { id: 'p3', nombre: 'Alfajores', precio: 7000 },
   { id: 'p4', nombre: 'Cheesecake de limón', precio: 7000 },
   { id: 'p5', nombre: 'Cheesecake de chocolate', precio: 7000 },

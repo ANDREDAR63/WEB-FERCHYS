@@ -11,7 +11,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Horneados' => 'Suspiros, profiteroles, alfajores y otros horneados artesanales',
+            'Horneados' => 'Suspiros, alfajores y otros horneados artesanales',
             'Cheesecakes' => 'Cheesecakes de distintos sabores con base de galleta',
         ];
 
@@ -24,7 +24,6 @@ class ProductSeeder extends Seeder
 
         $products = [
             ['name' => 'Suspiros', 'description' => 'Deliciosos merengues para endulzar tu día.', 'price' => 3000, 'category_id' => $horneados->id],
-            ['name' => 'Profiteroles', 'description' => 'Repollas rellenas de arequipe artesanal para una nota extra de sabor.', 'price' => 5000, 'category_id' => $horneados->id],
             ['name' => 'Alfajores', 'description' => 'Dulce tradicional argentino elaborado con dos delicadas galletas rellenas de arequipe y coco.', 'price' => 5000, 'category_id' => $horneados->id],
             ['name' => 'Cheesecake de limón', 'description' => 'Postre con base de galleta dulce y relleno de sabor a limón natural.', 'price' => 7000, 'category_id' => $cheesecakes->id],
             ['name' => 'Cheesecake de maracuyá', 'description' => 'Postre con base de galleta dulce y relleno de sabor a maracuyá natural.', 'price' => 7000, 'category_id' => $cheesecakes->id],

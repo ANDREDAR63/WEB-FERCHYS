@@ -25,7 +25,7 @@ const Hero = () => {
             <em>endulza</em> tu día
           </h1>
           <p className="hero__subtitle">
-            Cheesecakes, alfajores, profiteroles y más — preparados artesanalmente, con
+            Cheesecakes, alfajores y más — preparados artesanalmente, con
             ingredientes de la mejor calidad para cada ocasión especial.
           </p>
 

@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::query()->select(['id', 'name', 'email', 'role', 'active'])->latest()->get();
+        return User::query()->select(['id', 'name', 'email', 'role', 'phone', 'active'])->latest()->get();
     }
 
     public function store(Request $request)

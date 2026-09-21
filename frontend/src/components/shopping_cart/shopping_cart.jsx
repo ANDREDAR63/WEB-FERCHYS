@@ -8,7 +8,6 @@ import './shopping_cart.css';
 function Carrito() {
   const [items, setItems] = useState([]);
   const [products, setProducts] = useState([]);
-  const [productId, setProductId] = useState('');
   const [address, setAddress] = useState('');
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -41,7 +40,6 @@ function Carrito() {
       .then(([cart, productData, paymentMethodData, addressData]) => {
         setItems(cart.items || []);
         setProducts(productData);
-        setProductId(String(productData[0]?.id || ''));
         setPaymentMethods(paymentMethodData);
         setPaymentMethodId(String(paymentMethodData[0]?.id || ''));
         setSavedAddresses(addressData);
@@ -55,24 +53,6 @@ function Carrito() {
     setItems(cart.items || []);
     window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
   });
-
-  const agregarProducto = (event) => {
-    event.preventDefault();
-    if (!productId) return;
-    const product = products.find((item) => item.id === Number(productId));
-    if (!user) {
-      const quantity = itemQuantity(items.find((item) => item.product_id === product.id)) + 1;
-      const nextItems = upsertGuestItem(items, product, quantity);
-      setItems(nextItems);
-      writeGuestCart(nextItems);
-      window.dispatchEvent(new Event('ferchys-carrito-cambiado'));
-      return;
-    }
-    apiRequest('/cart/items', {
-      method: 'POST',
-      body: JSON.stringify({ product_id: Number(productId), quantity: 1 }),
-    }).then(refreshCart).catch((requestError) => setError(requestError.message));
-  };
 
   const cambiarCantidad = (item, quantity) => {
     if (!user) {
@@ -132,7 +112,7 @@ function Carrito() {
       {error && <p role="alert">{error}</p>}
       {orderCreated && <p role="status">Pedido #{orderCreated.id} creado correctamente.</p>}
 
-      <div className="add-product-box">
+      {/* <div className="add-product-box">
         <h3>Selecciona un producto para agregar:</h3>
         <form onSubmit={agregarProducto} className="add-product-form">
           <select value={productId} onChange={(event) => setProductId(event.target.value)} className="product-select">
@@ -140,7 +120,7 @@ function Carrito() {
           </select>
           <button type="submit" className="add-btn">Agregar al Carrito</button>
         </form>
-      </div>
+      </div> */}
 
       <hr />
       <div className="cart-items">

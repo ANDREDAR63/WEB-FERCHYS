@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './registration.css';
-import { apiRequest } from '../../services/api';
 import { useAuth } from '../../context/auth';
 
 export default function Registration() {
@@ -78,11 +77,8 @@ export default function Registration() {
       password: clave,
       password_confirmation: confirmarClave,
       phone: telefono,
+      address: direccion.trim(),
     })
-      .then(() => apiRequest('/addresses', {
-        method: 'POST',
-        body: JSON.stringify({ full_address: direccion.trim(), is_default: true }),
-      }))
       .then(() => setRegistradoExitoso(true))
       .catch((error) => setErrorMensaje(error.message))
       .finally(() => setEnviando(false));
@@ -113,7 +109,7 @@ export default function Registration() {
           <p>Te has registrado correctamente en Ferchy's Postres.</p>
           <p className="mensaje-exito__texto">Ya puedes disfrutar de nuestros dulces momentos.</p>
 
-          <NavLink to={returnPath} className="btn btn-primario">
+          <NavLink to="/login" state={{ from: returnPath }} className="btn btn-primario">
             Iniciar Sesión
           </NavLink>
         </div>

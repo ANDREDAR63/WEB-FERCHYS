@@ -1,12 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../navbar/navbar';
+import NavbarClient from '../navbar/NavbarClient';
 import Footer from '../footer/footer';
+import { useAuth } from '../../context/auth';
 import './layout.css';
 
 const CustomerLayout = () => {
+  const { user } = useAuth();
+
   return (
     <div className="layout-container">
-      <Navbar />
+      {user?.role === 'client' ? <NavbarClient /> : <Navbar />}
       <main className="layout-main">
         <Outlet />
       </main>

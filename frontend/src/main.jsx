@@ -1,15 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom' // Lo importamos aquí
+import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
-import './index.css' // Tus estilos globales
+import './index.css'
 import { AuthProvider } from './context/AuthContext.jsx'
+
+const rutaGuardada = new URLSearchParams(window.location.search).get('p');
+
+if (rutaGuardada) {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+  window.history.replaceState(
+    null,
+    '',
+    `${base}${rutaGuardada}${window.location.hash}`
+  );
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* Aquí configuramos el basename global para todo el proyecto */}
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <AuthProvider><App /></AuthProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

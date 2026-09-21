@@ -13,7 +13,6 @@ const obtenerImagen = (nombreArchivo) => {
 
 const imagenesPorProducto = {
   Suspiros: 'favicon-rosa',
-  Profiteroles: 'favicon-rosa',
   Alfajores: 'favicon-rosa',
   'Cheesecake de limón': 'cheesecake_limon',
   'Cheesecake de maracuyá': 'cheesecake_maracuya',
@@ -31,12 +30,6 @@ const productosIniciales = [
     descripcion: 'Deliciosos merengues para endulzar tu día.',
     precio: '$3.000', badge: '',
    
-  },
-  {
-    id: 2, categoria: 'horneados',
-    img:obtenerImagen('favicon-rosa'), nombre: 'Profiteroles',
-    descripcion: 'Repollas rellenas de arequipe artesanal para una nota extra de sabor.',
-    precio: '$5.000', badge: '',
   },
   {
     id: 3, categoria: 'horneados',

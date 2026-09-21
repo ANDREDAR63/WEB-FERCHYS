@@ -10,7 +10,8 @@ import Registration from './components/registration/registration';
 import PasswordRecovery from './components/passwordrecovery/passwordrecovery';
 import ShoppingCart from './components/shopping_cart/shopping_cart';
 import RoleRoute from './routes/RoleRoute';
-import { AdminDashboard, OrdersDashboard } from './components/dashboard/Dashboard';
+import { AdminDashboard } from './components/dashboard/Dashboard';
+import ClienteDashboard from './components/dashboard/ClienteDashboard';
 import CookDashboard from './components/dashboard/CookDashboard';
 import CourierDashboard from './components/dashboard/CourierDashboard';
 
@@ -27,6 +28,9 @@ function App() {
         <Route path="/PasswordRecovery" element={<PasswordRecovery />} />
         <Route path="/recuperar-contraseña" element={<PasswordRecovery />} />
         <Route path="/carrito" element={<ShoppingCart />} />
+        <Route element={<RoleRoute roles={['client']} />}>
+          <Route path="/dashboard/cliente" element={<ClienteDashboard />} />
+        </Route>
       </Route>
 
       <Route element={<DashboardLayout />}>
