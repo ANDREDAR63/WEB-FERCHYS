@@ -6,6 +6,7 @@ export async function apiRequest(path, options = {}) {
     ...options, 
     headers: {
       Accept: 'application/json',
+      'ngrok-skip-browser-warning': 'true',
       ...(options.body && !(options.headers && options.headers['Content-Type'] === false) ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
