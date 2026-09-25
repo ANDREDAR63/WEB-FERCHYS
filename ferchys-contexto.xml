@@ -2626,96 +2626,6 @@ This section contains the contents of the repository's files.
 10: }
 </file>
 
-<file path="frontend/src/components/navbar/NavbarClient.jsx">
- 1: import { useEffect, useState } from 'react';
- 2: import { NavLink, useNavigate } from 'react-router-dom';
- 3: import { apiRequest } from '../../services/api';
- 4: import { useAuth } from '../../context/auth';
- 5: import { itemQuantity, readGuestCart } from '../../services/guestCart';
- 6: import './navbar.css';
- 7: import logo from '../../assets/logo.ico';
- 8: 
- 9: export default function NavbarClient() {
-10:   const navigate = useNavigate();
-11:   const { logout } = useAuth();
-12:   const [scrolled, setScrolled] = useState(false);
-13:   const [menuOpen, setMenuOpen] = useState(false);
-14:   const [cartOpen, setCartOpen] = useState(false);
-15:   const [cartItems, setCartItems] = useState(() => readGuestCart());
-16: 
-17:   useEffect(() => {
-18:     const handleScroll = () => setScrolled(window.scrollY > 40);
-19:     const syncCart = () => {
-20:       if (!localStorage.getItem('ferchys-token')) {
-21:         setCartItems(readGuestCart());
-22:         return;
-23:       }
-24:       apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
-25:     };
-26: 
-27:     window.addEventListener('scroll', handleScroll);
-28:     syncCart();
-29:     window.addEventListener('ferchys-carrito-cambiado', syncCart);
-30:     window.addEventListener('storage', syncCart);
-31: 
-32:     return () => {
-33:       window.removeEventListener('scroll', handleScroll);
-34:       window.removeEventListener('ferchys-carrito-cambiado', syncCart);
-35:       window.removeEventListener('storage', syncCart);
-36:     };
-37:   }, []);
-38: 
-39:   const totalProductos = cartItems.reduce((total, item) => total + itemQuantity(item), 0);
-40: 
-41:   const manejarCierreSesion = async () => {
-42:     setMenuOpen(false);
-43:     setCartOpen(false);
-44:     await logout();
-45:     navigate('/');
-46:   };
-47: 
-48:   const cerrarMenu = () => setMenuOpen(false);
-49: 
-50:   return (
-51:     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
-52:       <div className="navbar__container">
-53:         <NavLink to="/catalogo" className="navbar__logo" onClick={cerrarMenu}>
-54:           <img src={logo} alt="Logo Ferchy" className="navbar__logo-icon" />
-55:           <span className="navbar__logo-text">Ferchy<span>'</span>s Postres</span>
-56:         </NavLink>
-57: 
-58:         <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
-59:           <li><NavLink to="/catalogo" className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Catálogo</NavLink></li>
-60:           <li><NavLink to="/dashboard/cliente" end className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Mis compras</NavLink></li>
-61:           <li className="navbar__cart-wrapper">
-62:             <button type="button" className="navbar__cart" onClick={() => { setMenuOpen(false); setCartOpen((prev) => !prev); }} aria-label="Carrito de compras">
-63:               Carrito 🛒 {totalProductos > 0 && <span>({totalProductos})</span>}
-64:             </button>
-65:             {cartOpen && (
-66:               <div className="navbar__cart-panel">
-67:                 <div className="navbar__cart-panel-header"><strong>Tu carrito</strong></div>
-68:                 {cartItems.length === 0 ? <p className="navbar__cart-empty">Aún no tienes productos agregados.</p> : (
-69:                   <div className="navbar__cart-items">
-70:                     {cartItems.map((item) => <div key={item.id} className="navbar__cart-item"><span>{item.product?.name || item.nombre || 'Producto'}</span><strong>x{itemQuantity(item)}</strong></div>)}
-71:                     <div className="navbar__cart-summary"><span>{totalProductos} productos</span></div>
-72:                   </div>
-73:                 )}
-74:                 <div className="navbar__cart-actions"><NavLink to="/carrito" className="navbar__cart-link" onClick={() => setCartOpen(false)}>Ir al carrito de compras</NavLink></div>
-75:               </div>
-76:             )}
-77:           </li>
-78:           <li><button type="button" className="navbar__logout" onClick={manejarCierreSesion}>Cerrar sesión</button></li>
-79:         </ul>
-80: 
-81:         <button type="button" className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`} onClick={() => setMenuOpen((prev) => !prev)} aria-label="Abrir menú">
-82:           <span /><span /><span />
-83:         </button>
-84:       </div>
-85:     </nav>
-86:   );
-87: }
-</file>
-
 <file path="frontend/src/context/auth-context.js">
 1: import { createContext } from 'react';
 2: 
@@ -4500,6 +4410,105 @@ This section contains the contents of the repository's files.
 81:   color: var(--color-oscuro);
 82:   text-decoration: underline;
 83: }
+</file>
+
+<file path="frontend/src/components/navbar/NavbarClient.jsx">
+ 1: import { useEffect, useState } from 'react';
+ 2: import { NavLink, useNavigate } from 'react-router-dom';
+ 3: import { apiRequest } from '../../services/api';
+ 4: import { useAuth } from '../../context/auth';
+ 5: import { itemQuantity, readGuestCart } from '../../services/guestCart';
+ 6: import './navbar.css';
+ 7: import logo from '../../assets/logo.ico';
+ 8: 
+ 9: export default function NavbarClient() {
+10:   const navigate = useNavigate();
+11:   const { logout } = useAuth();
+12:   const [scrolled, setScrolled] = useState(false);
+13:   const [menuOpen, setMenuOpen] = useState(false);
+14:   const [cartOpen, setCartOpen] = useState(false);
+15:   const [cartItems, setCartItems] = useState(() => readGuestCart());
+16: 
+17:   useEffect(() => {
+18:     const handleScroll = () => setScrolled(window.scrollY > 40);
+19:     const syncCart = () => {
+20:       if (!localStorage.getItem('ferchys-token')) {
+21:         setCartItems(readGuestCart());
+22:         return;
+23:       }
+24:       apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
+25:     };
+26: 
+27:     window.addEventListener('scroll', handleScroll);
+28:     syncCart();
+29:     window.addEventListener('ferchys-carrito-cambiado', syncCart);
+30:     window.addEventListener('storage', syncCart);
+31: 
+32:     return () => {
+33:       window.removeEventListener('scroll', handleScroll);
+34:       window.removeEventListener('ferchys-carrito-cambiado', syncCart);
+35:       window.removeEventListener('storage', syncCart);
+36:     };
+37:   }, []);
+38: 
+39:   const totalProductos = cartItems.reduce((total, item) => total + itemQuantity(item), 0);
+40: 
+41:   const manejarCierreSesion = async () => {
+42:     setMenuOpen(false);
+43:     setCartOpen(false);
+44:     await logout();
+45:     navigate('/');
+46:   };
+47: 
+48:   const cerrarMenu = () => setMenuOpen(false);
+49: 
+50:   return (
+51:     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+52:       <div className="navbar__container">
+53:         <NavLink to="/catalogo" className="navbar__logo" onClick={cerrarMenu}>
+54:           <img src={logo} alt="Logo Ferchy" className="navbar__logo-icon" />
+55:           <span className="navbar__logo-text">Ferchy<span>'</span>s Postres</span>
+56:         </NavLink>
+57: 
+58:         <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
+59:           <li><NavLink to="/catalogo" className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Catálogo</NavLink></li>
+60:           <li><NavLink to="/dashboard/cliente" end className={({ isActive }) => `navbar__link ${isActive ? 'navbar__link--active' : ''}`} onClick={cerrarMenu}>Mis compras</NavLink></li>
+61:           <li className="navbar__cart-wrapper">
+62:             <button type="button" className="navbar__cart" onClick={() => {
+63:               setMenuOpen(false);
+64:               const isMobile = window.innerWidth <= 768;
+65:               if (isMobile) {
+66:                 setCartOpen(false);
+67:                 navigate('/carrito');
+68:                 return;
+69:               }
+70:               setCartOpen((prev) => !prev);
+71:             }} aria-label="Carrito de compras">
+72:               Carrito 🛒 {totalProductos > 0 && <span>({totalProductos})</span>}
+73:             </button>
+74:             {cartOpen && (
+75:               <div className="navbar__cart-panel">
+76:                 <div className="navbar__cart-panel-header"><strong>Tu carrito</strong></div>
+77:                 {cartItems.length === 0 ? <p className="navbar__cart-empty">Aún no tienes productos agregados.</p> : (
+78:                   <div className="navbar__cart-items">
+79:                     {cartItems.map((item) => <div key={item.id} className="navbar__cart-item"><span>{item.product?.name || item.nombre || 'Producto'}</span><strong>x{itemQuantity(item)}</strong></div>)}
+80:                     <div className="navbar__cart-summary"><span>{totalProductos} productos</span></div>
+81:                   </div>
+82:                 )}
+83:                 <div className="navbar__cart-actions"><NavLink to="/carrito" className="navbar__cart-link" onClick={() => setCartOpen(false)}>Ir al carrito de compras</NavLink></div>
+84:               </div>
+85:             )}
+86:           </li>
+87:           <li><button type="button" className="navbar__logout" onClick={manejarCierreSesion}>Cerrar sesión</button></li>
+88:         </ul>
+89: 
+90:         <button type="button" className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`} onClick={() => setMenuOpen((prev) => !prev)} aria-label="Abrir menú">
+91:           <span /><span /><span />
+92:         </button>
+93:       </div>
+94:     </nav>
+95:   );
+96: }
 </file>
 
 <file path="frontend/src/components/passwordrecovery/passwordrecovery.css">
@@ -6933,173 +6942,6 @@ This section contains the contents of the repository's files.
 90: }
 </file>
 
-<file path="frontend/src/components/navbar/navbar.jsx">
-  1: import { useState, useEffect } from 'react';
-  2: import { NavLink, useNavigate } from 'react-router-dom';
-  3: import { apiRequest } from '../../services/api';
-  4: import { useAuth } from '../../context/auth';
-  5: import { itemQuantity, readGuestCart } from '../../services/guestCart';
-  6: import './navbar.css';
-  7: import logo from '../../assets/logo.ico';
-  8: 
-  9: const Navbar = () => {
- 10:   const navigate = useNavigate();
- 11:   const { user, logout } = useAuth();
- 12:   const [scrolled, setScrolled] = useState(false);
- 13:   const [menuOpen, setMenuOpen] = useState(false);
- 14:   const [cartOpen, setCartOpen] = useState(false);
- 15:   const [cartItems, setCartItems] = useState(() => {
- 16:     if (typeof window === 'undefined') return [];
- 17:     const guardado = localStorage.getItem('ferchys-carrito');
- 18:     return guardado ? JSON.parse(guardado) : [];
- 19:   });
- 20: 
- 21:   useEffect(() => {
- 22:     const handleScroll = () => setScrolled(window.scrollY > 40);
- 23:     window.addEventListener('scroll', handleScroll);
- 24: 
- 25:     const syncCart = () => {
- 26:       if (!localStorage.getItem('ferchys-token')) {
- 27:         setCartItems(readGuestCart());
- 28:         return;
- 29:       }
- 30:       apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
- 31:     };
- 32: 
- 33:     syncCart();
- 34:     window.addEventListener('ferchys-carrito-cambiado', syncCart);
- 35:     window.addEventListener('storage', syncCart);
- 36: 
- 37:     return () => {
- 38:       window.removeEventListener('scroll', handleScroll);
- 39:       window.removeEventListener('ferchys-carrito-cambiado', syncCart);
- 40:       window.removeEventListener('storage', syncCart);
- 41:     };
- 42:   }, []);
- 43: 
- 44:   const navLinks = [
- 45:     {to: '/',          label: 'Inicio' },
- 46:     { to: '/catalogo',  label: 'Catálogo' },
- 47:     { to: '/nosotros',  label: 'Nosotros' },
- 48:     { to: '/contacto',  label: 'Contacto' },
- 49:   ];
- 50: 
- 51:   const totalProductos = cartItems.reduce((total, item) => total + itemQuantity(item), 0);
- 52: 
- 53:   const manejarCierreSesion = async () => {
- 54:     setMenuOpen(false);
- 55:     setCartOpen(false);
- 56:     await logout();
- 57:     navigate('/');
- 58:   };
- 59: 
- 60:   return (
- 61:     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
- 62:       <div className="navbar__container">
- 63: 
- 64:         <NavLink to="/" className="navbar__logo" onClick={() => setMenuOpen(false)}>
- 65:           <img src={logo} alt="Logo Ferchy" className="navbar__logo-icon" />
- 66:           <span className="navbar__logo-text">
- 67:           Ferchy<span>'</span>s Postres
- 68:           </span>
- 69:         </NavLink>
- 70: 
- 71:         <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
- 72:           {navLinks.map(({ to, label }) => (
- 73:             <li key={to}>
- 74:               <NavLink
- 75:                 to={to}
- 76:                 end
- 77:                 className={({ isActive }) =>
- 78:                   `navbar__link ${isActive ? 'navbar__link--active' : ''}`
- 79:                 }
- 80:                 onClick={() => setMenuOpen(false)}
- 81:               >
- 82:                 {label}
- 83:               </NavLink>
- 84:             </li>
- 85:           ))}
- 86:           <li>
- 87:             {user ? (
- 88:               <button
- 89:                 type="button"
- 90:                 className="navbar__logout"
- 91:                 onClick={manejarCierreSesion}
- 92:               >
- 93:                 Cerrar sesión
- 94:               </button>
- 95:             ) : (
- 96:               <NavLink
- 97:                 to="/login"
- 98:                 className="navbar__cta"
- 99:                 onClick={() => setMenuOpen(false)}
-100:               >
-101:                 Iniciar Sesión
-102:               </NavLink>
-103:             )}
-104:           </li>
-105:           <li className="navbar__cart-wrapper">
-106:             <button
-107:               type="button"
-108:               className="navbar__cart"
-109:               onClick={() => {
-110:                 setMenuOpen(false);
-111:                 setCartOpen((prev) => !prev);
-112:               }}
-113:               aria-label="Carrito de compras"
-114:             >
-115:               Carrito 🛒 {totalProductos > 0 && <span>({totalProductos})</span>}
-116:             </button>
-117: 
-118:             {cartOpen && (
-119:               <div className="navbar__cart-panel">
-120:                 <div className="navbar__cart-panel-header">
-121:                   <strong>Tu carrito</strong>
-122:                 </div>
-123:                 {cartItems.length === 0 ? (
-124:                   <p className="navbar__cart-empty">Aún no tienes productos agregados.</p>
-125:                 ) : (
-126:                   <div className="navbar__cart-items">
-127:                     {cartItems.map((item) => (
-128:                       <div key={item.id} className="navbar__cart-item">
-129:                         <span>{item.product?.name || item.nombre || 'Producto'}</span>
-130:                         <strong>x{itemQuantity(item)}</strong>
-131:                       </div>
-132:                     ))}
-133:                     <div className="navbar__cart-summary">
-134:                       <span>{totalProductos} productos</span>
-135:                     </div>
-136:                   </div>
-137:                 )}
-138:                 <div className="navbar__cart-actions">
-139:                   <NavLink
-140:                     to="/carrito"
-141:                     className="navbar__cart-link"
-142:                     onClick={() => setCartOpen(false)}
-143:                   >
-144:                     Ir al carrito de compras
-145:                   </NavLink>
-146:                 </div>
-147:               </div>
-148:             )}
-149:           </li>
-150:         </ul>
-151: 
-152:         <button
-153:           className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`}
-154:           onClick={() => setMenuOpen(!menuOpen)}
-155:           aria-label="Abrir menú"
-156:         >
-157:           <span /><span /><span />
-158:         </button>
-159:       </div>
-160:     </nav>
-161:   );
-162: };
-163: 
-164: export default Navbar;
-</file>
-
 <file path="frontend/src/components/shopping_cart/shopping_cart.jsx">
   1: import { useEffect, useState } from 'react';
   2: import { useNavigate } from 'react-router-dom';
@@ -7253,6 +7095,179 @@ This section contains the contents of the repository's files.
 150: }
 151: 
 152: export default Carrito;
+</file>
+
+<file path="frontend/src/components/navbar/navbar.jsx">
+  1: import { useState, useEffect } from 'react';
+  2: import { NavLink, useNavigate } from 'react-router-dom';
+  3: import { apiRequest } from '../../services/api';
+  4: import { useAuth } from '../../context/auth';
+  5: import { itemQuantity, readGuestCart } from '../../services/guestCart';
+  6: import './navbar.css';
+  7: import logo from '../../assets/logo.ico';
+  8: 
+  9: const Navbar = () => {
+ 10:   const navigate = useNavigate();
+ 11:   const { user, logout } = useAuth();
+ 12:   const [scrolled, setScrolled] = useState(false);
+ 13:   const [menuOpen, setMenuOpen] = useState(false);
+ 14:   const [cartOpen, setCartOpen] = useState(false);
+ 15:   const [cartItems, setCartItems] = useState(() => {
+ 16:     if (typeof window === 'undefined') return [];
+ 17:     const guardado = localStorage.getItem('ferchys-carrito');
+ 18:     return guardado ? JSON.parse(guardado) : [];
+ 19:   });
+ 20: 
+ 21:   useEffect(() => {
+ 22:     const handleScroll = () => setScrolled(window.scrollY > 40);
+ 23:     window.addEventListener('scroll', handleScroll);
+ 24: 
+ 25:     const syncCart = () => {
+ 26:       if (!localStorage.getItem('ferchys-token')) {
+ 27:         setCartItems(readGuestCart());
+ 28:         return;
+ 29:       }
+ 30:       apiRequest('/cart').then((cart) => setCartItems(cart.items || [])).catch(() => setCartItems([]));
+ 31:     };
+ 32: 
+ 33:     syncCart();
+ 34:     window.addEventListener('ferchys-carrito-cambiado', syncCart);
+ 35:     window.addEventListener('storage', syncCart);
+ 36: 
+ 37:     return () => {
+ 38:       window.removeEventListener('scroll', handleScroll);
+ 39:       window.removeEventListener('ferchys-carrito-cambiado', syncCart);
+ 40:       window.removeEventListener('storage', syncCart);
+ 41:     };
+ 42:   }, []);
+ 43: 
+ 44:   const navLinks = [
+ 45:     {to: '/',          label: 'Inicio' },
+ 46:     { to: '/catalogo',  label: 'Catálogo' },
+ 47:     { to: '/nosotros',  label: 'Nosotros' },
+ 48:     { to: '/contacto',  label: 'Contacto' },
+ 49:   ];
+ 50: 
+ 51:   const totalProductos = cartItems.reduce((total, item) => total + itemQuantity(item), 0);
+ 52: 
+ 53:   const manejarCierreSesion = async () => {
+ 54:     setMenuOpen(false);
+ 55:     setCartOpen(false);
+ 56:     await logout();
+ 57:     navigate('/');
+ 58:   };
+ 59: 
+ 60:   return (
+ 61:     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+ 62:       <div className="navbar__container">
+ 63: 
+ 64:         <NavLink to="/" className="navbar__logo" onClick={() => setMenuOpen(false)}>
+ 65:           <img src={logo} alt="Logo Ferchy" className="navbar__logo-icon" />
+ 66:           <span className="navbar__logo-text">
+ 67:           Ferchy<span>'</span>s Postres
+ 68:           </span>
+ 69:         </NavLink>
+ 70: 
+ 71:         <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
+ 72:           {navLinks.map(({ to, label }) => (
+ 73:             <li key={to}>
+ 74:               <NavLink
+ 75:                 to={to}
+ 76:                 end
+ 77:                 className={({ isActive }) =>
+ 78:                   `navbar__link ${isActive ? 'navbar__link--active' : ''}`
+ 79:                 }
+ 80:                 onClick={() => setMenuOpen(false)}
+ 81:               >
+ 82:                 {label}
+ 83:               </NavLink>
+ 84:             </li>
+ 85:           ))}
+ 86:           <li>
+ 87:             {user ? (
+ 88:               <button
+ 89:                 type="button"
+ 90:                 className="navbar__logout"
+ 91:                 onClick={manejarCierreSesion}
+ 92:               >
+ 93:                 Cerrar sesión
+ 94:               </button>
+ 95:             ) : (
+ 96:               <NavLink
+ 97:                 to="/login"
+ 98:                 className="navbar__cta"
+ 99:                 onClick={() => setMenuOpen(false)}
+100:               >
+101:                 Iniciar Sesión
+102:               </NavLink>
+103:             )}
+104:           </li>
+105:           <li className="navbar__cart-wrapper">
+106:             <button
+107:               type="button"
+108:               className="navbar__cart"
+109:               onClick={() => {
+110:                 setMenuOpen(false);
+111:                 const isMobile = window.innerWidth <= 768;
+112:                 if (isMobile) {
+113:                   setCartOpen(false);
+114:                   navigate('/carrito');
+115:                   return;
+116:                 }
+117:                 setCartOpen((prev) => !prev);
+118:               }}
+119:               aria-label="Carrito de compras"
+120:             >
+121:               Carrito 🛒 {totalProductos > 0 && <span>({totalProductos})</span>}
+122:             </button>
+123: 
+124:             {cartOpen && (
+125:               <div className="navbar__cart-panel">
+126:                 <div className="navbar__cart-panel-header">
+127:                   <strong>Tu carrito</strong>
+128:                 </div>
+129:                 {cartItems.length === 0 ? (
+130:                   <p className="navbar__cart-empty">Aún no tienes productos agregados.</p>
+131:                 ) : (
+132:                   <div className="navbar__cart-items">
+133:                     {cartItems.map((item) => (
+134:                       <div key={item.id} className="navbar__cart-item">
+135:                         <span>{item.product?.name || item.nombre || 'Producto'}</span>
+136:                         <strong>x{itemQuantity(item)}</strong>
+137:                       </div>
+138:                     ))}
+139:                     <div className="navbar__cart-summary">
+140:                       <span>{totalProductos} productos</span>
+141:                     </div>
+142:                   </div>
+143:                 )}
+144:                 <div className="navbar__cart-actions">
+145:                   <NavLink
+146:                     to="/carrito"
+147:                     className="navbar__cart-link"
+148:                     onClick={() => setCartOpen(false)}
+149:                   >
+150:                     Ir al carrito de compras
+151:                   </NavLink>
+152:                 </div>
+153:               </div>
+154:             )}
+155:           </li>
+156:         </ul>
+157: 
+158:         <button
+159:           className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`}
+160:           onClick={() => setMenuOpen(!menuOpen)}
+161:           aria-label="Abrir menú"
+162:         >
+163:           <span /><span /><span />
+164:         </button>
+165:       </div>
+166:     </nav>
+167:   );
+168: };
+169: 
+170: export default Navbar;
 </file>
 
 <file path="frontend/src/App.jsx">
