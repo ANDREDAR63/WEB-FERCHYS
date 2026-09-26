@@ -39,6 +39,7 @@
 .dashboard-stat, .dashboard-panel { background: white; border: 1px solid #eadce1; border-radius: var(--borde-redondeado); padding: 1.25rem; box-shadow: var(--sombra-suave); }
 .dashboard-stat strong { display: block; font: 700 2rem var(--fuente-titulos); color: var(--color-primario); }
 .dashboard-stat span { font-size: .85rem; }
+.dashboard-stat { min-width: 0; }
 .dashboard-panel { overflow-x: auto; }
 .dashboard-panel h2 { text-align: left; font-size: 1.5rem; margin-bottom: 1rem; }
 .dashboard-panel h2::after { display: none; }
@@ -51,6 +52,8 @@
 .dashboard-form { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
 .dashboard-form button, .dashboard-table button { border: 0; border-radius: 8px; background: var(--color-primario); color: white; padding: .6rem .8rem; cursor: pointer; font: inherit; }
 .dashboard-table button:disabled { opacity: .55; cursor: wait; }
+.dashboard-form button:hover:not(:disabled), .dashboard-table button:hover:not(:disabled) { filter: brightness(.94); }
+.dashboard-form button:focus-visible, .dashboard-table button:focus-visible, .dashboard-accordion summary:focus-visible { outline: 3px solid rgba(238, 116, 165, .35); outline-offset: 2px; }
 .dashboard-empty { padding: 2rem 0; text-align: center; }
 .client-orders { display: grid; gap: 1rem; }
 .client-order__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
@@ -73,4 +76,5 @@
 .product-preview__content .card-producto__nombre, .product-preview__content .card-producto__desc { display: block; margin: 0; }
 .product-preview__price { color: var(--color-primario); font-weight: 700; }
 @media (max-width: 700px) { .client-order__body { grid-template-columns: 1fr; } .client-order__details { border-left: 0; border-top: 1px solid #f0e5e8; padding: 1rem 0 0; } }
+@media (max-width: 900px) { .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .dashboard-page { padding-top: 4.5rem; } .dashboard-heading { display: block; } .dashboard-grid, .dashboard-two-columns, .dashboard-form--grid { grid-template-columns: 1fr; } }

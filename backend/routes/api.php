@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PromotionController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Route;
@@ -59,5 +60,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'update']);
         Route::patch('/users/{user}/role', [UserController::class, 'updateRole']);
         Route::get('/payments', [PaymentController::class, 'index']);
+
+        Route::prefix('reports')->group(function () {
+            Route::get('/sales-by-period', [ReportController::class, 'salesByPeriod']);
+            Route::get('/sales-by-product', [ReportController::class, 'salesByProduct']);
+            Route::get('/orders-by-status', [ReportController::class, 'ordersByStatus']);
+        });
     });
+
+    Route::get('/reports/low-stock', [ReportController::class, 'lowStockIngredients'])
+        ->middleware('role:admin,cook');
 });
